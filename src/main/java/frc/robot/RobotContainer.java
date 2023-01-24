@@ -40,7 +40,7 @@ public class RobotContainer {
 
     // Autonomous routines.
     paths = new Trajectories();
-    testOneRoutine = new TestOneAuto(paths);
+    testOneRoutine = new TestOneAuto(paths, driveTrain);
 
     // Sets up dashboard for choosing different auto routines on the fly.
     routineChooser = new SendableChooser<>();

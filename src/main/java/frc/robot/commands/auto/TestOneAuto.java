@@ -16,8 +16,9 @@ public class TestOneAuto {
 
     private PathPlannerTrajectory path;
 
-    public TestOneAuto(Trajectories paths) {
-        paths.getTrajectory("PathONE");
+    public TestOneAuto(Trajectories paths, DriveTrain driveTrain) {
+        this.driveTrain = driveTrain;
+        path = paths.getTrajectory("Straight");
     }
 
     public Command getCommand() {
@@ -28,9 +29,9 @@ public class TestOneAuto {
             driveTrain.getKinematics(), 
             
             // Position controllers
-            new PIDController(0, 0, 0), 
-            new PIDController(0, 0, 0), 
-            new ProfiledPIDController(0, 0, 0, 
+            new PIDController(DriveConstants.kXP, 0, DriveConstants.kXD), 
+            new PIDController(DriveConstants.kYP, 0, DriveConstants.kYD), 
+            new ProfiledPIDController(2.12312, 0, 0, 
                 DriveConstants.kThetaConstraints),
 
             DriveConstants.kAutoConstraints.maxVelocity,

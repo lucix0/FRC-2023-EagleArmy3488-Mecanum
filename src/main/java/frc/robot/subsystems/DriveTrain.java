@@ -74,7 +74,7 @@ public class DriveTrain extends SubsystemBase {
         this.zSpeed = zSpeed;
         this.xSpeed = xSpeed;
         this.zRotation = zRotation;
-        driveTrain.driveCartesian(zSpeed, xSpeed, zRotation);
+        driveTrain.driveCartesian(zSpeed, xSpeed, zRotation, getPose().getRotation());
     }
 
     private void configureMotors(WPI_TalonFX FLMotor, WPI_TalonFX BLMotor, WPI_TalonFX FRMotor, WPI_TalonFX BRMotor) {

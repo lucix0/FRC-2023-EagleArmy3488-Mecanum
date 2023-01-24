@@ -40,16 +40,19 @@ public final class Constants {
         public static final double kGearRatio = 10.71;
         public static final double kEncoderResolution = 2048;
 
-        // TODO: Characterize robot for fresh values.
         // Characterization Constants
-        public static final double kP = 3.3619;
+        public static final double kP = 2.8287;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
-        public static final double kS = 0.59217;
-        public static final double kV = 2.4309;
-        public static final double kA = 0.37474;
-        public static final double kRamseteB = 2;
-        public static final double kRamseteZeta = 0.7;
+        public static final double kS = 0.054208;
+        public static final double kV = 2.474;
+        public static final double kA = 0.21718;
+
+        public static final double kXP = 85.171;
+        public static final double kXD = 5.3889;
+
+        public static final double kYP = 85.171;
+        public static final double kYD = 5.3889;
         
         public static final Constraints kAutoConstraints = new Constraints(
             0.9144, // Max velocity     // 6ft/s
@@ -60,13 +63,9 @@ public final class Constants {
             Math.PI, 
             Math.PI 
         );
-
-        // Max Speeds
-        public static final double kVelocityMax = 0.9144 ; // 6ft/s
-        public static final double kAccelerationMax = 0.6096; // 4ft/s^2
     }
 
     public static class PathConstants {
-        public static final String[] names = { "TestONE", "TestTWO" };
+        public static final String[] names = { "PathONE", "PathTWO", "Straight" };
     }
 }
