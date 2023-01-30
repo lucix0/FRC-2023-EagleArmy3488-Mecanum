@@ -2,7 +2,6 @@ package frc.robot.commands.auto;
 
 import static frc.robot.Constants.*;
 
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -30,12 +29,12 @@ public class TestOneAuto {
             driveTrain.getKinematics(), 
 
             // Position controllers
-            new PIDController(DriveConstants.kXP, 0, DriveConstants.kXD), 
-            new PIDController(DriveConstants.kYP, 0, DriveConstants.kYD), 
-            new ProfiledPIDController(2.12312, 0, 0, 
-                DriveConstants.kThetaConstraints),
+            new PIDController(Drive.kPosP, 0, Drive.kPosD), 
+            new PIDController(Drive.kPosP, 0, Drive.kPosD), 
+            new ProfiledPIDController(Drive.kThetaP, 0, 0, 
+                Drive.kThetaConstraints),
 
-            DriveConstants.kAutoConstraints.maxVelocity,
+            Drive.kAutoConstraints.maxVelocity,
 
             // Velocity PID
             driveTrain.getFLPID(),

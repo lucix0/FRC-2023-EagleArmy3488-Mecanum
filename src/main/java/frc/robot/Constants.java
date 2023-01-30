@@ -15,12 +15,12 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static class ControllerConstants {
+    public static class Controller {
         public static final int kPort = 0;
-        public static final double kStickDeadzone = 0.15;
+        public static final double kDeadzone = 0.15;
     }
 
-    public static class DriveConstants {
+    public static class Drive {
         // CAN ids.
         public static final int kFLMotorID = 3;
         public static final int kBLMotorID = 1;
@@ -33,8 +33,6 @@ public final class Constants {
 
         // Ramp val
         public static final double kRampInSec = 0.1875;
-
-        public static final double kVelocityLimit = 1.00;
 
         // Physical Robot Properties (in inches)
         public static final double kWheelRadius = 3;
@@ -49,11 +47,10 @@ public final class Constants {
         public static final double kV = 2.474;
         public static final double kA = 0.21718;
 
-        public static final double kXP = 85.171;
-        public static final double kXD = 5.3889;
+        public static final double kThetaP = 2.12312;
 
-        public static final double kYP = 85.171;
-        public static final double kYD = 5.3889;
+        public static final double kPosP = 85.171;
+        public static final double kPosD = 5.3889;
 
         public static final Constraints kAutoConstraints = new Constraints(
             0.9144, // Max velocity     // 6ft/s
@@ -66,7 +63,14 @@ public final class Constants {
         );
     }
 
-    public static class PathConstants {
+    public static class Path {
         public static final String[] names = { "PathONE", "PathTWO", "Straight" };
+    }
+
+    public static class Extend {
+        public static final double kMotor = 4;
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
     }
 }

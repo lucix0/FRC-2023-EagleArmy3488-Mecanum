@@ -40,12 +40,13 @@ public class DriveTrain extends SubsystemBase {
     public double zRotation;
 
     private boolean isFieldOriented;
+    private boolean isBraking;
 
     public DriveTrain() {
-        FLMotor = new WPI_TalonFX(DriveConstants.kFLMotorID);
-        BLMotor = new WPI_TalonFX(DriveConstants.kBLMotorID);
-        FRMotor = new WPI_TalonFX(DriveConstants.kFRMotorID);
-        BRMotor = new WPI_TalonFX(DriveConstants.kBRMotorID);
+        FLMotor = new WPI_TalonFX(Drive.kFLMotorID);
+        BLMotor = new WPI_TalonFX(Drive.kBLMotorID);
+        FRMotor = new WPI_TalonFX(Drive.kFRMotorID);
+        BRMotor = new WPI_TalonFX(Drive.kBRMotorID);
         configureMotors(FLMotor, BLMotor, FRMotor, BRMotor);
 
         gyro = new AHRS(SPI.Port.kMXP);
@@ -56,12 +57,12 @@ public class DriveTrain extends SubsystemBase {
             new Translation2d(-0.292, -0.268), new Translation2d(0.292, -0.268));
         odometry = new MecanumDriveOdometry(kinematics, Rotation2d.fromDegrees(-gyro.getAngle()), 
             new MecanumDriveWheelPositions(getFLDistance(), getFRDistance(), getBLDistance(), getBRDistance()));
-        feedForward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kA);
+        feedForward = new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA);
         
-        FLPID = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
-        BLPID = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
-        FRPID = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
-        BRPID = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+        FLPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        BLPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        FRPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        BRPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
 
         isFieldOriented = false;
 
@@ -77,6 +78,7 @@ public class DriveTrain extends SubsystemBase {
         pose = odometry.update(gyroAngle, wheelPositions);
 
         SmartDashboard.putBoolean("Field Oriented", isFieldOriented);
+        SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch());
     }
 
     public void mecanumDrive(double zSpeed, double xSpeed, double zRotation) {
@@ -99,16 +101,16 @@ public class DriveTrain extends SubsystemBase {
         setFactory(BRMotor);
         
         // Right motors inverted.
-        FLMotor.setInverted(DriveConstants.kLeftInverted);
-        BLMotor.setInverted(DriveConstants.kLeftInverted);
-        FRMotor.setInverted(DriveConstants.kRightInverted);
-        BRMotor.setInverted(DriveConstants.kRightInverted);
+        FLMotor.setInverted(Drive.kLeftInverted);
+        BLMotor.setInverted(Drive.kLeftInverted);
+        FRMotor.setInverted(Drive.kRightInverted);
+        BRMotor.setInverted(Drive.kRightInverted);
 
         // Sets minimum time to accelerate to max speed.
-        FLMotor.configOpenloopRamp(DriveConstants.kRampInSec);
-        BLMotor.configOpenloopRamp(DriveConstants.kRampInSec);
-        FRMotor.configOpenloopRamp(DriveConstants.kRampInSec);
-        BRMotor.configOpenloopRamp(DriveConstants.kRampInSec);
+        FLMotor.configOpenloopRamp(Drive.kRampInSec);
+        BLMotor.configOpenloopRamp(Drive.kRampInSec);
+        FRMotor.configOpenloopRamp(Drive.kRampInSec);
+        BRMotor.configOpenloopRamp(Drive.kRampInSec);
 
         // Prevents robots from gliding stopping accel.
         FLMotor.setNeutralMode(NeutralMode.Brake);
@@ -146,39 +148,47 @@ public class DriveTrain extends SubsystemBase {
         return isFieldOriented;
     }
 
+    public void setBraking(boolean bool) {
+        isBraking = bool;
+    }
+
+    public boolean getBraking() {
+        return isBraking;
+    }
+
     public MecanumDriveWheelSpeeds getWheelSpeeds() {
-        double flRotationsPerSecond = (double) getFLVelocity() / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 10;
-        double flVelocity = flRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double flRotationsPerSecond = (double) getFLVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double flVelocity = flRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
 
-        double blRotationsPerSecond = (double) getBLVelocity() / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 10;
-        double blVelocity = blRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double blRotationsPerSecond = (double) getBLVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double blVelocity = blRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
 
-        double frRotationsPerSecond = (double) getFRVelocity() / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 10;
-        double frVelocity = frRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double frRotationsPerSecond = (double) getFRVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double frVelocity = frRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
 
-        double brRotationsPerSecond = (double) getBRVelocity() / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 10;
-        double brVelocity = brRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double brRotationsPerSecond = (double) getBRVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double brVelocity = brRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
 
         return new MecanumDriveWheelSpeeds(flVelocity, frVelocity, blVelocity, brVelocity);
     }
 
     public double getFLDistance() {
-        double flDistance = ((double) getFLEncoderPosition()) / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double flDistance = ((double) getFLEncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
         return flDistance;
     }
 
     public double getBLDistance() {
-        double blDistance = ((double) getBLEncoderPosition()) / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double blDistance = ((double) getBLEncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
         return blDistance;
     }
 
     public double getFRDistance() {
-        double frDistance = ((double) getFREncoderPosition()) / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double frDistance = ((double) getFREncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
         return frDistance;
     }
 
     public double getBRDistance() {
-        double brDistance = ((double) getBREncoderPosition()) / DriveConstants.kEncoderResolution / DriveConstants.kGearRatio * 2 * Math.PI * Units.inchesToMeters(DriveConstants.kWheelRadius);
+        double brDistance = ((double) getBREncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
         return brDistance;
     }
 
@@ -240,6 +250,10 @@ public class DriveTrain extends SubsystemBase {
 
     public SimpleMotorFeedforward getFeedForward() {
         return feedForward;
+    }
+
+    public AHRS getGyro() {
+        return gyro;
     }
 
     public Pose2d getPose() {
