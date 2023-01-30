@@ -34,8 +34,9 @@ public final class Constants {
         // Ramp val
         public static final double kRampInSec = 0.1875;
 
+        public static final double kVelocityLimit = 1.00;
+
         // Physical Robot Properties (in inches)
-        public static final double kTrackWidth = 22;
         public static final double kWheelRadius = 3;
         public static final double kGearRatio = 10.71;
         public static final double kEncoderResolution = 2048;
@@ -53,7 +54,7 @@ public final class Constants {
 
         public static final double kYP = 85.171;
         public static final double kYD = 5.3889;
-        
+
         public static final Constraints kAutoConstraints = new Constraints(
             0.9144, // Max velocity     // 6ft/s
             0.6096  // Max acceleration // 4ft/s^2

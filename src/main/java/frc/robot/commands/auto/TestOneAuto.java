@@ -2,6 +2,7 @@ package frc.robot.commands.auto;
 
 import static frc.robot.Constants.*;
 
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -23,11 +24,11 @@ public class TestOneAuto {
 
     public Command getCommand() {
         return new MecanumControllerCommand(
-            path,
+            path.transformBy(driveTrain.getPose().minus(path.getInitialPose())),
             driveTrain::getPose,
             driveTrain.getFeedForward(),
             driveTrain.getKinematics(), 
-            
+
             // Position controllers
             new PIDController(DriveConstants.kXP, 0, DriveConstants.kXD), 
             new PIDController(DriveConstants.kYP, 0, DriveConstants.kYD), 

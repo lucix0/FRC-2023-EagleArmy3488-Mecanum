@@ -6,14 +6,19 @@ package frc.robot;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.MecanumDriveCmd;
+import frc.robot.commands.SetOrientationCmd;
 import frc.robot.commands.auto.TestOneAuto;
 import frc.robot.subsystems.DriveTrain;
 
+import com.fasterxml.jackson.databind.node.POJONode;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -23,14 +28,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  // Subsystems.
   private final DriveTrain driveTrain;
-
-  private final XboxController controller;
 
   // Autonomous routines.
   private final Trajectories paths;
   private final SendableChooser<Command> routineChooser;
-  private final TestOneAuto testOneRoutine;
+  private final TestOneAuto testRoutine1;
+
+  private final XboxController controller;
 
   public RobotContainer() {
     driveTrain = new DriveTrain();
@@ -40,12 +46,12 @@ public class RobotContainer {
 
     // Autonomous routines.
     paths = new Trajectories();
-    testOneRoutine = new TestOneAuto(paths, driveTrain);
+    testRoutine1 = new TestOneAuto(paths, driveTrain);
 
     // Sets up dashboard for choosing different auto routines on the fly.
     routineChooser = new SendableChooser<>();
     routineChooser.setDefaultOption("None", null);
-    routineChooser.addOption("Test Routine 1", testOneRoutine.getCommand());
+    routineChooser.addOption("Test Routine 1", testRoutine1.getCommand());
     SmartDashboard.putData(routineChooser);
     
     driveTrain.setDefaultCommand(new MecanumDriveCmd(driveTrain, () -> controller.getLeftY(), () -> controller.getLeftX(), () -> controller.getRightX()));
@@ -61,10 +67,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    new JoystickButton(controller, XboxController.Button.kLeftStick.value).
+      whileTrue(new SetOrientationCmd(driveTrain));
   }
 
   public Command getAutonomousCommand() {
+    driveTrain.resetOdometry(new Pose2d());
     return routineChooser.getSelected();
   }
 }

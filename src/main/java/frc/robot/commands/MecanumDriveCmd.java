@@ -3,6 +3,7 @@ package frc.robot.commands;
 import static frc.robot.Constants.ControllerConstants;
 
 import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Range;
 import frc.robot.Util;
@@ -25,13 +26,6 @@ public class MecanumDriveCmd extends CommandBase {
         double zSpeed = zSpeedFunc.get();
         double xSpeed = xSpeedFunc.get();
         double zRotation = zRotationFunc.get();
-
-        /*  
-         *  This section of code restricts the range of input of the sticks
-         *  to counter stick drift. Input can be between 0.15 and 1.00,
-         *  which is then strected to 0.00 to 1.00,
-         *  for example, 0.15 becomes 0.00.
-         */ 
         
         Range initial = new Range(1.00, ControllerConstants.kStickDeadzone);
         Range limited = new Range(1.00, 0.00);

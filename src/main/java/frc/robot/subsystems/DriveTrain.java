@@ -1,16 +1,6 @@
-/*
- *  Currently, this is a very barebones mecanum subsystem. The only functionality here is basic movement
- *  using the left stick for strafing and the right stick for rotating. 
- *  This should work just fine, however if there are any issues with the controls, those can be found
- *  in RobotContainer.java in the classes constructor in the driveTrain.setDefaultCommand method call.
- *  Have fun testing :)
- * 
- *      -S
- */
-
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.*;
+import frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -29,22 +19,27 @@ import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
     private WPI_TalonFX FLMotor, BLMotor, FRMotor, BRMotor;
+
     private MecanumDrive driveTrain;
     private MecanumDriveKinematics kinematics;
     private MecanumDriveOdometry odometry;
-    private SimpleMotorFeedforward feedForward;
 
+    private SimpleMotorFeedforward feedForward;
     private PIDController FLPID, BLPID, FRPID, BRPID;
 
     private AHRS gyro;
+    private Pose2d pose;
 
     public double zSpeed;
     public double xSpeed;
     public double zRotation;
+
+    private boolean isFieldOriented;
 
     public DriveTrain() {
         FLMotor = new WPI_TalonFX(DriveConstants.kFLMotorID);
@@ -54,10 +49,12 @@ public class DriveTrain extends SubsystemBase {
         configureMotors(FLMotor, BLMotor, FRMotor, BRMotor);
 
         gyro = new AHRS(SPI.Port.kMXP);
+        resetGyro();
+        pose = new Pose2d();
 
         kinematics = new MecanumDriveKinematics(new Translation2d(-0.292, 0.268), new Translation2d(0.292, 0.268), 
             new Translation2d(-0.292, -0.268), new Translation2d(0.292, -0.268));
-        odometry = new MecanumDriveOdometry(kinematics, Rotation2d.fromDegrees(gyro.getAngle()), 
+        odometry = new MecanumDriveOdometry(kinematics, Rotation2d.fromDegrees(-gyro.getAngle()), 
             new MecanumDriveWheelPositions(getFLDistance(), getFRDistance(), getBLDistance(), getBRDistance()));
         feedForward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kA);
         
@@ -66,15 +63,32 @@ public class DriveTrain extends SubsystemBase {
         FRPID = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
         BRPID = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
 
+        isFieldOriented = false;
+
         driveTrain = new MecanumDrive(FLMotor, BLMotor, FRMotor, BRMotor);
         driveTrain.setSafetyEnabled(false);
+    }
+
+    @Override
+    public void periodic() {
+        // Update pose.
+        var wheelPositions = new MecanumDriveWheelPositions(getFLDistance(), getFRDistance(), getBLDistance(), getBRDistance());
+        Rotation2d gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+        pose = odometry.update(gyroAngle, wheelPositions);
+
+        SmartDashboard.putBoolean("Field Oriented", isFieldOriented);
     }
 
     public void mecanumDrive(double zSpeed, double xSpeed, double zRotation) {
         this.zSpeed = zSpeed;
         this.xSpeed = xSpeed;
         this.zRotation = zRotation;
-        driveTrain.driveCartesian(zSpeed, xSpeed, zRotation, getPose().getRotation());
+
+        if (!isFieldOriented) {
+            driveTrain.driveCartesian(zSpeed, xSpeed, zRotation);
+        } else {
+            driveTrain.driveCartesian(zSpeed, xSpeed, zRotation, Rotation2d.fromDegrees(gyro.getAngle()));
+        }
     }
 
     private void configureMotors(WPI_TalonFX FLMotor, WPI_TalonFX BLMotor, WPI_TalonFX FRMotor, WPI_TalonFX BRMotor) {
@@ -106,8 +120,30 @@ public class DriveTrain extends SubsystemBase {
     public void setMotorVolts(MecanumDriveMotorVoltages volts) {
         FLMotor.setVoltage(volts.frontLeftVoltage);
         BLMotor.setVoltage(volts.rearLeftVoltage);
-        FRMotor.setVoltage(volts.rearRightVoltage);
+        FRMotor.setVoltage(volts.frontRightVoltage);
         BRMotor.setVoltage(volts.rearRightVoltage);
+    }
+
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(-gyro.getAngle());
+    }
+
+    // Reset Functions
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        resetGyro();
+        System.out.println("WARNING! " + getHeading());
+        odometry.resetPosition(getHeading(), 
+            new MecanumDriveWheelPositions(0, 0, 0, 0),
+            pose);
+    }
+
+    public void setFieldOriented(boolean bool) {
+        isFieldOriented = bool;
+    }
+
+    public boolean getFieldOriented() {
+        return isFieldOriented;
     }
 
     public MecanumDriveWheelSpeeds getWheelSpeeds() {
@@ -207,7 +243,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return odometry.getPoseMeters();
+        return pose;
     }
 
     public void resetGyro() {
