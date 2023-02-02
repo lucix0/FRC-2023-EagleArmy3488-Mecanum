@@ -68,10 +68,43 @@ public final class Constants {
         public static final String[] names = { "PathONE", "PathTWO", "Straight" };
     }
 
-    public static class Extend {
-        public static final double kMotor = 4;
+    public static class Grab {
+        // CAN IDs
+        public static final int kGrabberMotorID = 0;
+        
+        // Characterization Values
+        public final static double kS = 0;
+        public final static double kV = 0;
+        public final static double kA = 0;
+        public final static double kP = 0;
+        public final static double kI = 0;
+        public final static double kD = 0;
+    
+        public final static double kEncoderResolution = 2048;
+        public final static double kGearRatio = 1.5;
+        public final static double kWheelDiameter = 4;
+
+        public final static double kThresh = 0;
+        public final static double kVoltage = 0;
+    }
+
+    public static class FB {
+        public static final int kSlotIdx = 0;
+        
+        public static final double kF = 0;
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
+    
+        public static final int kTimeoutMs = 30;
+    
+        public static final int kFourBarMotorOne = 0;
+        public static final int kFourBarMotorTwo = 1;
+    
+        public static final double kUpperSpeed = 0.2;
+        public static final double kLowerSpeed = 0.2;
+        public static final double kLowerLimit = 0;
+        public static final double kUpperLimit = 0;
+    
     }
 }

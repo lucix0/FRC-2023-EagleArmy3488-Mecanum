@@ -5,21 +5,27 @@
 package frc.robot;
 
 import frc.robot.Constants.Controller;
+import frc.robot.commands.FourBarActCmd;
+import frc.robot.commands.GrabCmd;
 import frc.robot.commands.MecanumDriveCmd;
 import frc.robot.commands.SetOrientationCmd;
 import frc.robot.commands.auto.TestOneAuto;
 import frc.robot.subsystems.DriveTrain;
-
+import frc.robot.subsystems.FourBar;
+import frc.robot.subsystems.Grabber;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
     // Subsystems.
     private final DriveTrain driveTrain;
+    private final Grabber grabber;
+    private final FourBar fourBar;
 
     // Autonomous routines.
     private final Trajectories paths;
@@ -31,6 +37,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveTrain = new DriveTrain();
+        grabber = new Grabber();
+        fourBar = new FourBar();
 
         driveController = new XboxController(Controller.kDriverPort);
         operatorController = new XboxController(Controller.kOperatorPort);
@@ -51,8 +59,20 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        Trigger drLeftTrigger = new Trigger(() -> driveController.getLeftTriggerAxis() >= 0.1);
+        Trigger drRightTrigger = new Trigger(() -> driveController.getRightTriggerAxis() >= 0.1);
+
+        Trigger opLeftTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() >= 0.1);
+        Trigger opRightTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() >= 0.1);
+
+        // Driver.
         new JoystickButton(driveController, XboxController.Button.kLeftStick.value)
-                .onTrue(new SetOrientationCmd(driveTrain));
+            .onTrue(new SetOrientationCmd(driveTrain));
+        
+        // Operator.
+        opRightTrigger.whileTrue(new GrabCmd(grabber));
+        new JoystickButton(operatorController, XboxController.Button.kRightBumper.value)
+            .onTrue(new FourBarActCmd(fourBar));
     }
 
     public Command getAutonomousCommand() {
