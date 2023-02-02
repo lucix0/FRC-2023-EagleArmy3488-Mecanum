@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -77,8 +78,12 @@ public class DriveTrain extends SubsystemBase {
         Rotation2d gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
         pose = odometry.update(gyroAngle, wheelPositions);
 
-        SmartDashboard.putBoolean("Field Oriented", isFieldOriented);
-        SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch());
+        // SmartDashboard setup.
+        SmartDashboard.putBoolean("Field Oriented?", isFieldOriented);
+        SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
+        SmartDashboard.putData("GyroHeading", gyro);
+
+        // Debug elements.
     }
 
     public void mecanumDrive(double zSpeed, double xSpeed, double zRotation) {

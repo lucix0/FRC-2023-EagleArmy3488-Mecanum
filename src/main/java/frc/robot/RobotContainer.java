@@ -42,7 +42,7 @@ public class RobotContainer {
         routineChooser = new SendableChooser<>();
         routineChooser.setDefaultOption("None", null);
         routineChooser.addOption("Test Routine 1", testRoutine1.getCommand());
-        SmartDashboard.putData(routineChooser);
+        SmartDashboard.putData("Auto Routines", routineChooser);
 
         driveTrain.setDefaultCommand(new MecanumDriveCmd(driveTrain, () -> controller.getLeftY(),
                 () -> controller.getLeftX(), () -> controller.getRightX()));
@@ -50,7 +50,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         new JoystickButton(controller, XboxController.Button.kLeftStick.value)
-            .onTrue(new SetOrientationCmd(driveTrain));
+                .onTrue(new SetOrientationCmd(driveTrain));
     }
 
     public Command getAutonomousCommand() {

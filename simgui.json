@@ -26,15 +26,14 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Routines": "String Chooser",
+      "/SmartDashboard/GyroHeading": "Gyro",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "SendableChooser[0]": {
-          "open": true
-        },
         "open": true
       }
     }
