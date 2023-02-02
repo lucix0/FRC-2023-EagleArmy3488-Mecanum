@@ -16,7 +16,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  */
 public final class Constants {
     public static class Controller {
-        public static final int kPort = 0;
+        public static final int kDriverPort = 0;
+        public static final int kOperatorPort = 1;
         public static final double kDeadzone = 0.15;
     }
 

@@ -82,8 +82,6 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putBoolean("Field Oriented?", isFieldOriented);
         SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
         SmartDashboard.putData("GyroHeading", gyro);
-
-        // Debug elements.
     }
 
     public void mecanumDrive(double zSpeed, double xSpeed, double zRotation) {
