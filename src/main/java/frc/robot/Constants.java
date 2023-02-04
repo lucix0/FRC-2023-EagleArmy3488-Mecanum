@@ -64,18 +64,6 @@ public final class Constants {
         );
     }
 
-    public static class Balance {
-        public static final double kGoalDegrees = 0.0;
-        public static final double kP = 0.015;
-        public static final double kBackwardsBoostMultiplier = 1.0;
-        public static final double kAngleThreshold = 3.0;
-    }
-
-    public static class Turn {
-        public static final double kP = 0.007;
-        public static final double kAngleThreshold = 3.0;
-    }
-
     public static class Path {
         public static final String[] names = { "PathONE", "PathTWO", "Straight" };
     }
@@ -118,24 +106,5 @@ public final class Constants {
         public static final double kLowerLimit = 0;
         public static final double kUpperLimit = 0;
     
-    }
-
-    public static class Extend {
-        public static final int kSlotIdx = 0;
-    
-        public static final double kF = 0;
-        public static final double kP = 0;
-        public static final double kI = 0;
-        public static final double kD = 0;
-
-        public static final int kTimeoutMs = 30;
-
-        public static final int kExtenderMotorOne = 0;
-        public static final int kExtenderMotorTwo = 1;
-        
-        public static final double kRaiseSpeed = 0.2;
-        public static final double kDropSpeed = 0.2;
-        public static final double kRaiseLimit = 0;
-        public static final double kDropLimit = 0;
     }
 }

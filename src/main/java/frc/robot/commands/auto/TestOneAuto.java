@@ -9,14 +9,14 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import frc.robot.Trajectories;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.DriveTrain;
 
 public class TestOneAuto {
-    private DriveSubsystem driveTrain;
+    private DriveTrain driveTrain;
 
     private PathPlannerTrajectory path;
 
-    public TestOneAuto(Trajectories paths, DriveSubsystem driveTrain) {
+    public TestOneAuto(Trajectories paths, DriveTrain driveTrain) {
         this.driveTrain = driveTrain;
         path = paths.getTrajectory("Straight");
     }

@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveSubsystem extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
     private WPI_TalonFX FLMotor, BLMotor, FRMotor, BRMotor;
 
     private MecanumDrive driveTrain;
@@ -43,7 +43,7 @@ public class DriveSubsystem extends SubsystemBase {
     private boolean isFieldOriented;
     private boolean isBraking;
 
-    public DriveSubsystem() {
+    public DriveTrain() {
         FLMotor = new WPI_TalonFX(Drive.kFLMotorID);
         BLMotor = new WPI_TalonFX(Drive.kBLMotorID);
         FRMotor = new WPI_TalonFX(Drive.kFRMotorID);
@@ -82,11 +82,6 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Field Oriented?", isFieldOriented);
         SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
         SmartDashboard.putData("GyroHeading", gyro);
-    }
-
-    // Stops the drive's motors.
-    public void stop() {
-        mecanumDrive(0, 0, 0);
     }
 
     public void mecanumDrive(double zSpeed, double xSpeed, double zRotation) {
@@ -136,11 +131,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(-gyro.getAngle());
-    }
-
-    // Returns the drive's rotation in degrees.
-    public double getAngle() {
-        return -gyro.getAngle();
     }
 
     // Reset Functions

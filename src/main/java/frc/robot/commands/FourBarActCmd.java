@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.FourBarSubsystem;
+import frc.robot.subsystems.FourBar;
 
 public class FourBarActCmd extends CommandBase {
-    private final FourBarSubsystem fourBar;
+    private final FourBar fourBar;
     private boolean complete = false;
 
-    public FourBarActCmd(FourBarSubsystem fourBar) {
+    public FourBarActCmd(FourBar fourBar) {
         this.fourBar = fourBar;
         addRequirements(fourBar);
     }

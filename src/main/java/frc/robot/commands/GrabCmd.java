@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.GrabberSubsystem;
+import frc.robot.subsystems.Grabber;
 
 public class GrabCmd extends CommandBase {
-    GrabberSubsystem grabber;
+    Grabber grabber;
 
-    public GrabCmd(GrabberSubsystem grabber) {
+    public GrabCmd(Grabber grabber) {
         this.grabber = grabber;
         addRequirements(grabber);
     }
