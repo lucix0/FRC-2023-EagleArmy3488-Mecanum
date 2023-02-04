@@ -7,13 +7,13 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Range;
 import frc.robot.Util;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class MecanumDriveCmd extends CommandBase {
-    private final DriveTrain driveTrain;
+    private final DriveSubsystem driveTrain;
     private Supplier<Double> zSpeedFunc, xSpeedFunc, zRotationFunc;
 
-    public MecanumDriveCmd(DriveTrain driveTrain, Supplier<Double> zSpeedFunc, Supplier<Double> xSpeedFunc, Supplier<Double> zRotationFunc) {
+    public MecanumDriveCmd(DriveSubsystem driveTrain, Supplier<Double> zSpeedFunc, Supplier<Double> xSpeedFunc, Supplier<Double> zRotationFunc) {
         this.driveTrain = driveTrain;
         this.zSpeedFunc = zSpeedFunc;
         this.xSpeedFunc = xSpeedFunc;

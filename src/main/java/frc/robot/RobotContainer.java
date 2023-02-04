@@ -10,9 +10,9 @@ import frc.robot.commands.GrabCmd;
 import frc.robot.commands.MecanumDriveCmd;
 import frc.robot.commands.SetOrientationCmd;
 import frc.robot.commands.auto.TestOneAuto;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.FourBar;
-import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.FourBarSubsystem;
+import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,9 +23,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
     // Subsystems.
-    private final DriveTrain driveTrain;
-    private final Grabber grabber;
-    private final FourBar fourBar;
+    private final DriveSubsystem driveTrain;
+    private final GrabberSubsystem grabber;
+    private final FourBarSubsystem fourBar;
 
     // Autonomous routines.
     private final Trajectories paths;
@@ -36,9 +36,9 @@ public class RobotContainer {
     private final XboxController operatorController;
 
     public RobotContainer() {
-        driveTrain = new DriveTrain();
-        grabber = new Grabber();
-        fourBar = new FourBar();
+        driveTrain = new DriveSubsystem();
+        grabber = new GrabberSubsystem();
+        fourBar = new FourBarSubsystem();
 
         driveController = new XboxController(Controller.kDriverPort);
         operatorController = new XboxController(Controller.kOperatorPort);

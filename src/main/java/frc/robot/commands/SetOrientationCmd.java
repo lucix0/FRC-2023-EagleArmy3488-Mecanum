@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class SetOrientationCmd extends CommandBase {
-    private final DriveTrain driveTrain;
+    private final DriveSubsystem driveTrain;
     private boolean complete = false;
 
-    public SetOrientationCmd(DriveTrain driveTrain) {
+    public SetOrientationCmd(DriveSubsystem driveTrain) {
         this.driveTrain = driveTrain;
         addRequirements(driveTrain);
     }

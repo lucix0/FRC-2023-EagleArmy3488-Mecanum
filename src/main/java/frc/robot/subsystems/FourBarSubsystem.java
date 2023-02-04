@@ -13,11 +13,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class FourBar extends SubsystemBase {
+public class FourBarSubsystem extends SubsystemBase {
     private WPI_TalonFX fourBarMotorOne, fourBarMotorTwo;
     private double speed;
 
-    public FourBar() {
+    public FourBarSubsystem() {
         speed = FB.kUpperSpeed;
         fourBarMotorOne = new WPI_TalonFX(FB.kFourBarMotorOne);
         fourBarMotorOne.configFactoryDefault();

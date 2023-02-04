@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
   
-public class Grabber extends SubsystemBase {
+public class GrabberSubsystem extends SubsystemBase {
     private WPI_TalonFX grabberMotor;
 
     private double thresh;
     private PIDController pidController;
     private SimpleMotorFeedforward feedForward;
 
-    public Grabber() {
+    public GrabberSubsystem() {
         grabberMotor = new WPI_TalonFX(Grab.kGrabberMotorID);
         grabberMotor.configFactoryDefault();
         thresh = Grab.kThresh;

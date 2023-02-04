@@ -3,18 +3,18 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.DriveSubsystem;
 
 /*
  *  Autonomous command which makes robot drive forward, reducing speed as
  *  the rotation of the robot on the x axis nears zero.
  */
-public class BalanceCmd extends CommandBase {
-    private final DriveTrain driveTrain;
+public class BalanceCSCmd extends CommandBase {
+    private final DriveSubsystem driveTrain;
     private Timer timer;
     private boolean complete = false;
 
-    public BalanceCmd(DriveTrain driveTrain) {
+    public BalanceCSCmd(DriveSubsystem driveTrain) {
         this.driveTrain = driveTrain;
         this.timer = new Timer();
         addRequirements(driveTrain);
