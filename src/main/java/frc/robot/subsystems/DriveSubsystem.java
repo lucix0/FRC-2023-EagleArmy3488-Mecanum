@@ -54,9 +54,9 @@ public class DriveSubsystem extends SubsystemBase {
         resetGyro();
         pose = new Pose2d();
 
-        kinematics = new MecanumDriveKinematics(new Translation2d(-0.292, 0.268), new Translation2d(0.292, 0.268), 
-            new Translation2d(-0.292, -0.268), new Translation2d(0.292, -0.268));
-        odometry = new MecanumDriveOdometry(kinematics, Rotation2d.fromDegrees(-gyro.getAngle()), 
+        kinematics = new MecanumDriveKinematics(new Translation2d(0.305, 0.305), new Translation2d(0.305, -0.305), 
+            new Translation2d(-0.305, 0.305), new Translation2d(-0.305, -0.305));
+        odometry = new MecanumDriveOdometry(kinematics, getHeading(), 
             new MecanumDriveWheelPositions(getFLDistance(), getFRDistance(), getBLDistance(), getBRDistance()));
         feedForward = new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA);
         
@@ -135,7 +135,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getHeading() {
-        return Rotation2d.fromDegrees(-gyro.getAngle());
+        return Rotation2d.fromDegrees(getAngle());
     }
 
     // Returns the drive's rotation in degrees.
