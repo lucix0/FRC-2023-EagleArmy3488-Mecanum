@@ -23,7 +23,7 @@ public class TestOneAuto {
 
     public Command getCommand() {
         return new MecanumControllerCommand(
-            path.transformBy(driveTrain.getPose().minus(path.getInitialPose())),
+            path,
             driveTrain::getPose,
             driveTrain.getFeedForward(),
             driveTrain.getKinematics(), 
