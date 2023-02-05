@@ -1,5 +1,7 @@
-[subsystems]
 driveEnabled = true
 extenderEnabled = false
 fourBarEnabled = false
 grabberEnabled = false
+
+driveControllerConnected = true
+operatorControllerConnected = false
