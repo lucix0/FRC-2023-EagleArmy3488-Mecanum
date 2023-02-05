@@ -23,7 +23,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.Robot;
 import frc.robot.Constants.*;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -35,10 +35,12 @@ public class TurnToAngleCmd extends CommandBase {
     double targetAngle; // targetAngle = initial angle + degreesToTurn
 
     /** Turns to an angle relative to the current angle using the gyro */
-    public TurnToAngleCmd(DriveSubsystem driveSubsystem, double degreesToTurn) {
-        m_DriveSubsystem = driveSubsystem;
-        addRequirements(m_DriveSubsystem);
+    public TurnToAngleCmd(double degreesToTurn) {
+        this.m_DriveSubsystem = Robot.m_DriveSubsystem;
+
         this.degreesToTurn = degreesToTurn;
+
+        addRequirements(m_DriveSubsystem);
     }
 
     // Called when the command is initially scheduled.
@@ -65,7 +67,7 @@ public class TurnToAngleCmd extends CommandBase {
         System.out.println("error:" + error);
         System.out.println("value:" + value);
 
-        m_DriveSubsystem.mecanumDrive(0, 0, value); // drive with the calculated values
+        m_DriveSubsystem.drive(0, 0, value); // drive with the calculated values
     }
 
     // Called once the command ends or is interrupted.

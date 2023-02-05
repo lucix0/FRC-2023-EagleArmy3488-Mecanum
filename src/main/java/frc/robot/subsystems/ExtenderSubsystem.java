@@ -18,11 +18,11 @@ public class ExtenderSubsystem extends SubsystemBase {
     private double speed;
 
     public ExtenderSubsystem() {
-        speed = Extend.kRaiseSpeed;
-        extenderMotorOne = new WPI_TalonFX(Extend.kExtenderMotorOne);
+        speed = Extender.kRaiseSpeed;
+        extenderMotorOne = new WPI_TalonFX(Extender.kMotorOneID);
         extenderMotorOne.configFactoryDefault();
 
-        extenderMotorTwo = new WPI_TalonFX(Extend.kExtenderMotorTwo);
+        extenderMotorTwo = new WPI_TalonFX(Extender.kMotorTwoID);
         extenderMotorTwo.configFactoryDefault();
         extenderMotorTwo.follow(extenderMotorOne);
 
@@ -31,36 +31,36 @@ public class ExtenderSubsystem extends SubsystemBase {
 
         // PID
         extenderMotorOne.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-                Extend.kSlotIdx, Extend.kTimeoutMs);
-        extenderMotorOne.config_kF(Extend.kSlotIdx, Extend.kF);
-        extenderMotorOne.config_kP(Extend.kSlotIdx, Extend.kP);
-        extenderMotorOne.config_kI(Extend.kSlotIdx, Extend.kI);
-        extenderMotorOne.config_kD(Extend.kSlotIdx, Extend.kD);
+                Extender.kSlotIdx, Extender.kTimeoutMs);
+        extenderMotorOne.config_kF(Extender.kSlotIdx, Extender.kF);
+        extenderMotorOne.config_kP(Extender.kSlotIdx, Extender.kP);
+        extenderMotorOne.config_kI(Extender.kSlotIdx, Extender.kI);
+        extenderMotorOne.config_kD(Extender.kSlotIdx, Extender.kD);
         extenderMotorTwo.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-                Extend.kSlotIdx, Extend.kTimeoutMs);
-        extenderMotorTwo.config_kF(Extend.kSlotIdx, Extend.kF);
-        extenderMotorTwo.config_kP(Extend.kSlotIdx, Extend.kP);
-        extenderMotorTwo.config_kI(Extend.kSlotIdx, Extend.kI);
-        extenderMotorTwo.config_kD(Extend.kSlotIdx, Extend.kD);
+                Extender.kSlotIdx, Extender.kTimeoutMs);
+        extenderMotorTwo.config_kF(Extender.kSlotIdx, Extender.kF);
+        extenderMotorTwo.config_kP(Extender.kSlotIdx, Extender.kP);
+        extenderMotorTwo.config_kI(Extender.kSlotIdx, Extender.kI);
+        extenderMotorTwo.config_kD(Extender.kSlotIdx, Extender.kD);
     }
 
     public void run() {
-        if (speed == Extend.kRaiseSpeed) {
-            extenderMotorOne.set(ControlMode.Position, Extend.kRaiseLimit);
-            extenderMotorTwo.set(ControlMode.Position, Extend.kRaiseLimit);
+        if (speed == Extender.kRaiseSpeed) {
+            extenderMotorOne.set(ControlMode.Position, Extender.kRaiseLimit);
+            extenderMotorTwo.set(ControlMode.Position, Extender.kRaiseLimit);
         }
-        if (speed == Extend.kDropSpeed) {
-            extenderMotorOne.set(ControlMode.Position, Extend.kDropLimit);
-            extenderMotorTwo.set(ControlMode.Position, Extend.kDropLimit);
+        if (speed == Extender.kDropSpeed) {
+            extenderMotorOne.set(ControlMode.Position, Extender.kDropLimit);
+            extenderMotorTwo.set(ControlMode.Position, Extender.kDropLimit);
         }
     }
 
     public void setToRaise() {
-        speed = Extend.kRaiseSpeed;
+        speed = Extender.kRaiseSpeed;
     }
 
     public void setToLower() {
-        speed = Extend.kDropSpeed;
+        speed = Extender.kDropSpeed;
 
     }
 

@@ -1,32 +1,32 @@
 package frc.robot.commands.auto;
 
-import static frc.robot.Constants.*;
-
-import com.pathplanner.lib.PathPlannerTrajectory;
+import frc.robot.Robot;
+import frc.robot.Constants.*;
+import frc.robot.Trajectories;
+import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
-import frc.robot.Trajectories;
-import frc.robot.subsystems.DriveSubsystem;
+
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 public class TestOneAuto {
-    private DriveSubsystem driveTrain;
-
+    private final DriveSubsystem m_DriveSubsystem;
     private PathPlannerTrajectory path;
 
-    public TestOneAuto(Trajectories paths, DriveSubsystem driveTrain) {
-        this.driveTrain = driveTrain;
+    public TestOneAuto(Trajectories paths) {
+        this.m_DriveSubsystem = Robot.m_DriveSubsystem;
         path = paths.getTrajectory("Straight");
     }
 
     public Command getCommand() {
         return new MecanumControllerCommand(
             path,
-            driveTrain::getPose,
-            driveTrain.getFeedForward(),
-            driveTrain.getKinematics(), 
+            m_DriveSubsystem::getPose,
+            m_DriveSubsystem.getFeedForward(),
+            m_DriveSubsystem.getKinematics(), 
 
             // Position controllers
             new PIDController(Drive.kPosP, 0, Drive.kPosD), 
@@ -37,13 +37,13 @@ public class TestOneAuto {
             Drive.kAutoConstraints.maxVelocity,
 
             // Velocity PID
-            driveTrain.getFLPID(),
-            driveTrain.getBLPID(),
-            driveTrain.getFRPID(),
-            driveTrain.getBRPID(),
-            driveTrain::getWheelSpeeds,
-            driveTrain::setMotorVolts,
-            driveTrain
+            m_DriveSubsystem.getFLPID(),
+            m_DriveSubsystem.getBLPID(),
+            m_DriveSubsystem.getFRPID(),
+            m_DriveSubsystem.getBRPID(),
+            m_DriveSubsystem::getWheelSpeeds,
+            m_DriveSubsystem::setMotorVolts,
+            m_DriveSubsystem
         );
     }
 }

@@ -6,19 +6,20 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Range;
+import frc.robot.Robot;
 import frc.robot.Util;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class MecanumDriveCmd extends CommandBase {
-    private final DriveSubsystem driveTrain;
+public class DriveCmd extends CommandBase {
+    private final DriveSubsystem m_DriveSubsystem;
     private Supplier<Double> zSpeedFunc, xSpeedFunc, zRotationFunc;
 
-    public MecanumDriveCmd(DriveSubsystem driveTrain, Supplier<Double> zSpeedFunc, Supplier<Double> xSpeedFunc, Supplier<Double> zRotationFunc) {
-        this.driveTrain = driveTrain;
+    public DriveCmd(Supplier<Double> zSpeedFunc, Supplier<Double> xSpeedFunc, Supplier<Double> zRotationFunc) {
+        this.m_DriveSubsystem = Robot.m_DriveSubsystem;
         this.zSpeedFunc = zSpeedFunc;
         this.xSpeedFunc = xSpeedFunc;
         this.zRotationFunc = zRotationFunc;
-        addRequirements(driveTrain);
+        addRequirements(Robot.m_DriveSubsystem);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class MecanumDriveCmd extends CommandBase {
         }   
 
         // Y-axis must be flipped because up on the left stick is neg.
-        driveTrain.mecanumDrive(-newZSpeed, newXSpeed, newZRotation);
+        m_DriveSubsystem.drive(-newZSpeed, newXSpeed, newZRotation);
     }
 
     @Override

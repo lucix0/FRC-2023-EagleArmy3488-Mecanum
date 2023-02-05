@@ -86,10 +86,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Stops the drive's motors.
     public void stop() {
-        mecanumDrive(0, 0, 0);
+        drive(0, 0, 0);
     }
 
-    public void mecanumDrive(double zSpeed, double xSpeed, double zRotation) {
+    public void drive(double zSpeed, double xSpeed, double zRotation) {
         this.zSpeed = zSpeed;
         this.xSpeed = xSpeed;
         this.zRotation = zRotation;
@@ -136,6 +136,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(getAngle());
+    }
+
+    public double getPitch() {
+        return gyro.getPitch();
     }
 
     // Returns the drive's rotation in degrees.

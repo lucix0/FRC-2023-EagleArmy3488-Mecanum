@@ -21,6 +21,13 @@ public final class Constants {
         public static final double kDeadzone = 0.15;
     }
 
+    public static class Subsystems {
+        public static final boolean kDriveConnected = true;
+        public static final boolean kExtenderConnected = true;
+        public static final boolean kFourBarConnected = true;
+        public static final boolean kGrabberConnected = true;
+    }
+
     public static class Drive {
         // CAN ids.
         public static final int kFLMotorID = 3;
@@ -80,9 +87,9 @@ public final class Constants {
         public static final String[] names = { "PathONE", "PathTWO", "Straight" };
     }
 
-    public static class Grab {
+    public static class Grabber {
         // CAN IDs
-        public static final int kGrabberMotorID = 0;
+        public static final int kMotorID = 0;
         
         // Characterization Values
         public final static double kS = 0;
@@ -96,22 +103,22 @@ public final class Constants {
         public final static double kGearRatio = 1.5;
         public final static double kWheelDiameter = 4;
 
-        public final static double kThresh = 0;
+        public final static double kThreshold = 0;
         public final static double kVoltage = 0;
     }
 
-    public static class FB {
+    public static class FourBar {
         public static final int kSlotIdx = 0;
         
-        public static final double kF = 0;
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
+        public static final double kF = 0;
     
         public static final int kTimeoutMs = 30;
     
-        public static final int kFourBarMotorOne = 0;
-        public static final int kFourBarMotorTwo = 1;
+        public static final int kMotorOneID = 0;
+        public static final int kMotorTwoID = 1;
     
         public static final double kUpperSpeed = 0.2;
         public static final double kLowerSpeed = 0.2;
@@ -120,18 +127,18 @@ public final class Constants {
     
     }
 
-    public static class Extend {
+    public static class Extender {
         public static final int kSlotIdx = 0;
     
-        public static final double kF = 0;
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
+        public static final double kF = 0;
 
         public static final int kTimeoutMs = 30;
 
-        public static final int kExtenderMotorOne = 0;
-        public static final int kExtenderMotorTwo = 1;
+        public static final int kMotorOneID = 0;
+        public static final int kMotorTwoID = 1;
         
         public static final double kRaiseSpeed = 0.2;
         public static final double kDropSpeed = 0.2;
