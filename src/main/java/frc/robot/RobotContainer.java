@@ -22,12 +22,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-    // Subsystems.
+    private final Config robotConfig;
     private final DriveSubsystem driveTrain;
     private final GrabberSubsystem grabber;
     private final FourBarSubsystem fourBar;
 
-    // Autonomous routines.
     private final Trajectories paths;
     private final SendableChooser<Command> routineChooser;
     private final TestOneAuto testRoutine1;
@@ -36,6 +35,8 @@ public class RobotContainer {
     private final XboxController operatorController;
 
     public RobotContainer() {
+        robotConfig = new Config("lonedrive");
+
         driveTrain = new DriveSubsystem();
         grabber = new GrabberSubsystem();
         fourBar = new FourBarSubsystem();
