@@ -14,6 +14,8 @@ public class Config {
     private boolean extenderEnabled;
     private boolean fourBarEnabled;
     private boolean grabberEnabled;
+    private boolean driveControllerConnected;
+    private boolean operatorControllerConnected;
 
     public Config() {
         File configFile = new File(Filesystem.getDeployDirectory(), "config/default.toml");
@@ -23,6 +25,8 @@ public class Config {
         extenderEnabled = config.getBoolean("extenderEnabled");
         fourBarEnabled = config.getBoolean("fourBarEnabled");
         grabberEnabled = config.getBoolean("grabberEnabled");
+        driveControllerConnected = config.getBoolean("driveControllerConnected");
+        operatorControllerConnected = config.getBoolean("operatorControllerConnected");
     }
 
     public Config(String configName) {
@@ -33,6 +37,8 @@ public class Config {
         extenderEnabled = config.getBoolean("extenderEnabled");
         fourBarEnabled = config.getBoolean("fourBarEnabled");
         grabberEnabled = config.getBoolean("grabberEnabled");
+        driveControllerConnected = config.getBoolean("driveControllerConnected");
+        operatorControllerConnected = config.getBoolean("operatorControllerConnected");
     }
 
     public boolean getDriveEnabled() {
@@ -49,5 +55,13 @@ public class Config {
 
     public boolean getGrabberEnabled() {
         return grabberEnabled;
+    }
+
+    public boolean getDriveControllerStatus() {
+        return driveControllerConnected;
+    }
+
+    public boolean getOperatorControllerStatus() {
+        return operatorControllerConnected;
     }
 }
