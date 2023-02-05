@@ -22,10 +22,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-    private final Config robotConfig;
+    private final Config config;
+
     private final DriveSubsystem driveTrain;
-    private final GrabberSubsystem grabber;
-    private final FourBarSubsystem fourBar;
 
     private final Trajectories paths;
     private final SendableChooser<Command> routineChooser;
@@ -35,14 +34,22 @@ public class RobotContainer {
     private final XboxController operatorController;
 
     public RobotContainer() {
-        robotConfig = new Config("lonedrive");
+        config = new Config("lonedrive");
 
         driveTrain = new DriveSubsystem();
-        grabber = new GrabberSubsystem();
-        fourBar = new FourBarSubsystem();
 
-        driveController = new XboxController(Controller.kDriverPort);
-        operatorController = new XboxController(Controller.kOperatorPort);
+        if (config.getDriveControllerStatus()) {
+            driveController = new XboxController(Controller.kDriverPort);
+        } else {
+            driveController = null;
+        }
+        
+        if (config.getOperatorControllerStatus()) {
+            operatorController = new XboxController(Controller.kOperatorPort);
+        } else {
+            operatorController = null;
+        }
+        
         configureBindings();
 
         // Autonomous routines.
@@ -60,20 +67,34 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        Trigger drLeftTrigger = new Trigger(() -> driveController.getLeftTriggerAxis() >= 0.1);
-        Trigger drRightTrigger = new Trigger(() -> driveController.getRightTriggerAxis() >= 0.1);
+        Trigger drLeftTrigger;
+        Trigger drRightTrigger;
+        if (config.getDriveControllerStatus()) {
+            drLeftTrigger = new Trigger(() -> driveController.getLeftTriggerAxis() >= 0.1);
+            drRightTrigger = new Trigger(() -> driveController.getRightTriggerAxis() >= 0.1);
+        } else {
+            drLeftTrigger = null;
+            drRightTrigger = null;
+        }
 
-        Trigger opLeftTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() >= 0.1);
-        Trigger opRightTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() >= 0.1);
+        Trigger opLeftTrigger;
+        Trigger opRightTrigger;
+        if (config.getOperatorControllerStatus()) {
+            opLeftTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() >= 0.1);
+            opRightTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() >= 0.1);
+        } else {
+            opLeftTrigger = null;
+            opRightTrigger = null;
+        }
 
-        // Driver.
-        new JoystickButton(driveController, XboxController.Button.kLeftStick.value)
-            .onTrue(new SetOrientationCmd(driveTrain));
+        if (config.getDriveControllerStatus()) {
+            new JoystickButton(driveController, XboxController.Button.kLeftStick.value)
+                .onTrue(new SetOrientationCmd(driveTrain));
+        }
         
-        // Operator.
-        opRightTrigger.whileTrue(new GrabCmd(grabber));
-        new JoystickButton(operatorController, XboxController.Button.kRightBumper.value)
-            .onTrue(new FourBarActCmd(fourBar));
+        if (config.getOperatorControllerStatus()) {
+
+        }  
     }
 
     public Command getAutonomousCommand() {
