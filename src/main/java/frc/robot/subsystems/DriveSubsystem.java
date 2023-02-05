@@ -1,37 +1,44 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.*;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
+import frc.robot.MotorUtil;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
-
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import com.kauailabs.navx.frc.AHRS;
+
 public class DriveSubsystem extends SubsystemBase {
-    private WPI_TalonFX FLMotor, BLMotor, FRMotor, BRMotor;
+    /*
+     * Motor order is:
+     *     Front left,
+     *     Front right,
+     *     Back left,
+     *     Back right
+     */
+    private WPI_TalonFX[] motors;
 
     private MecanumDrive driveTrain;
     private MecanumDriveKinematics kinematics;
     private MecanumDriveOdometry odometry;
 
     private SimpleMotorFeedforward feedForward;
-    private PIDController FLPID, BLPID, FRPID, BRPID;
+    private PIDController[] drivePID;
 
     private AHRS gyro;
     private Pose2d pose;
@@ -41,55 +48,62 @@ public class DriveSubsystem extends SubsystemBase {
     public double zRotation;
 
     private boolean isFieldOriented;
-    private boolean isBraking;
 
     public DriveSubsystem() {
-        FLMotor = new WPI_TalonFX(Drive.kFLMotorID);
-        BLMotor = new WPI_TalonFX(Drive.kBLMotorID);
-        FRMotor = new WPI_TalonFX(Drive.kFRMotorID);
-        BRMotor = new WPI_TalonFX(Drive.kBRMotorID);
-        configureMotors(FLMotor, BLMotor, FRMotor, BRMotor);
-
+        // Motors are created and configured.
+        motors[0] = new WPI_TalonFX(Drive.kFLMotorID);
+        motors[1] = new WPI_TalonFX(Drive.kFRMotorID);
+        motors[2] = new WPI_TalonFX(Drive.kBLMotorID);
+        motors[3] = new WPI_TalonFX(Drive.kBRMotorID);
+        configureMotors(motors[0], motors[1], motors[2], motors[3]);
+        
+        // Odometry and gyro setup.
         gyro = new AHRS(SPI.Port.kMXP);
         resetGyro();
         pose = new Pose2d();
 
-        kinematics = new MecanumDriveKinematics(new Translation2d(0.305, 0.305), new Translation2d(0.305, -0.305), 
-            new Translation2d(-0.305, 0.305), new Translation2d(-0.305, -0.305));
-        odometry = new MecanumDriveOdometry(kinematics, getHeading(), 
-            new MecanumDriveWheelPositions(getFLDistance(), getFRDistance(), getBLDistance(), getBRDistance()));
+        // Kinematics, odometry, drive PID. Primarily for autonomous.
+        kinematics = Drive.kKinematics;
+        odometry = new MecanumDriveOdometry(
+            kinematics, 
+            getHeading(), 
+            new MecanumDriveWheelPositions(
+                MotorUtil.getMotorDistance(motors[0]), 
+                MotorUtil.getMotorDistance(motors[1]),
+                MotorUtil.getMotorDistance(motors[2]),
+                MotorUtil.getMotorDistance(motors[3])
+            )
+        );
         feedForward = new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA);
-        
-        FLPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
-        BLPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
-        FRPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
-        BRPID = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        drivePID[0] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        drivePID[1] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        drivePID[2] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        drivePID[3] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
 
         isFieldOriented = false;
 
-        driveTrain = new MecanumDrive(FLMotor, BLMotor, FRMotor, BRMotor);
+        // Motors aren't in order because this class' motor order is different.
+        driveTrain = new MecanumDrive(motors[0], motors[2], motors[1], motors[3]);
         driveTrain.setSafetyEnabled(false);
     }
 
     @Override
     public void periodic() {
         // Update pose.
-        var wheelPositions = new MecanumDriveWheelPositions(getFLDistance(), getFRDistance(), getBLDistance(), getBRDistance());
-        Rotation2d gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
-        pose = odometry.update(gyroAngle, wheelPositions);
+        pose = updatePose();
 
         // SmartDashboard setup.
         SmartDashboard.putBoolean("Field Oriented?", isFieldOriented);
-        SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
+        SmartDashboard.putNumber("GyroPitch", getPitch());
         SmartDashboard.putData("GyroHeading", gyro);
     }
 
     // Stops the drive's motors.
     public void stop() {
-        mecanumDrive(0, 0, 0);
+        drive(0, 0, 0);
     }
 
-    public void mecanumDrive(double zSpeed, double xSpeed, double zRotation) {
+    public void drive(double zSpeed, double xSpeed, double zRotation) {
         this.zSpeed = zSpeed;
         this.xSpeed = xSpeed;
         this.zRotation = zRotation;
@@ -101,17 +115,17 @@ public class DriveSubsystem extends SubsystemBase {
         }
     }
 
-    private void configureMotors(WPI_TalonFX FLMotor, WPI_TalonFX BLMotor, WPI_TalonFX FRMotor, WPI_TalonFX BRMotor) {
+    private void configureMotors(WPI_TalonFX FLMotor, WPI_TalonFX FRMotor, WPI_TalonFX BLMotor, WPI_TalonFX BRMotor) {
         // Reset motors' settings to their defaults.
-        setFactory(FLMotor);
-        setFactory(BLMotor);
-        setFactory(FRMotor);
-        setFactory(BRMotor);
+        MotorUtil.setFactory(FLMotor);
+        MotorUtil.setFactory(FRMotor);
+        MotorUtil.setFactory(BLMotor);
+        MotorUtil.setFactory(BRMotor);
         
         // Right motors inverted.
         FLMotor.setInverted(Drive.kLeftInverted);
-        BLMotor.setInverted(Drive.kLeftInverted);
         FRMotor.setInverted(Drive.kRightInverted);
+        BLMotor.setInverted(Drive.kLeftInverted);
         BRMotor.setInverted(Drive.kRightInverted);
 
         // Sets minimum time to accelerate to max speed.
@@ -128,143 +142,35 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setMotorVolts(MecanumDriveMotorVoltages volts) {
-        FLMotor.setVoltage(volts.frontLeftVoltage);
-        BLMotor.setVoltage(volts.rearLeftVoltage);
-        FRMotor.setVoltage(volts.frontRightVoltage);
-        BRMotor.setVoltage(volts.rearRightVoltage);
+        motors[0].setVoltage(volts.frontLeftVoltage);
+        motors[1].setVoltage(volts.frontRightVoltage);
+        motors[3].setVoltage(volts.rearLeftVoltage);
+        motors[4].setVoltage(volts.rearRightVoltage);
+    }
+
+    public Pose2d updatePose() {
+        Rotation2d gyroAngle = getHeading();
+        var wheelPositions = new MecanumDriveWheelPositions(
+            MotorUtil.getMotorDistance(motors[0]),
+            MotorUtil.getMotorDistance(motors[1]),
+            MotorUtil.getMotorDistance(motors[2]),
+            MotorUtil.getMotorDistance(motors[3])
+        );
+        return odometry.update(gyroAngle, wheelPositions);
     }
 
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(getAngle());
     }
 
-    // Returns the drive's rotation in degrees.
     public double getAngle() {
         return -gyro.getAngle();
     }
 
-    // Reset Functions
-    public void resetOdometry(Pose2d pose) {
-        resetEncoders();
-        resetGyro();
-        System.out.println("WARNING! " + getHeading());
-        odometry.resetPosition(getHeading(), 
-            new MecanumDriveWheelPositions(0, 0, 0, 0),
-            pose);
+    public double getPitch() {
+        return gyro.getPitch();
     }
-
-    public void setFieldOriented(boolean bool) {
-        isFieldOriented = bool;
-    }
-
-    public boolean getFieldOriented() {
-        return isFieldOriented;
-    }
-
-    public void setBraking(boolean bool) {
-        isBraking = bool;
-    }
-
-    public boolean getBraking() {
-        return isBraking;
-    }
-
-    public MecanumDriveWheelSpeeds getWheelSpeeds() {
-        double flRotationsPerSecond = (double) getFLVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
-        double flVelocity = flRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-
-        double blRotationsPerSecond = (double) getBLVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
-        double blVelocity = blRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-
-        double frRotationsPerSecond = (double) getFRVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
-        double frVelocity = frRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-
-        double brRotationsPerSecond = (double) getBRVelocity() / Drive.kEncoderResolution / Drive.kGearRatio * 10;
-        double brVelocity = brRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-
-        return new MecanumDriveWheelSpeeds(flVelocity, frVelocity, blVelocity, brVelocity);
-    }
-
-    public double getFLDistance() {
-        double flDistance = ((double) getFLEncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-        return flDistance;
-    }
-
-    public double getBLDistance() {
-        double blDistance = ((double) getBLEncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-        return blDistance;
-    }
-
-    public double getFRDistance() {
-        double frDistance = ((double) getFREncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-        return frDistance;
-    }
-
-    public double getBRDistance() {
-        double brDistance = ((double) getBREncoderPosition()) / Drive.kEncoderResolution / Drive.kGearRatio * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
-        return brDistance;
-    }
-
-    public double getFLVelocity() {
-        return FLMotor.getSelectedSensorVelocity();
-    }
-
-    public double getBLVelocity() {
-        return BLMotor.getSelectedSensorVelocity();
-    }
-
-    public double getFRVelocity() {
-        return FRMotor.getSelectedSensorVelocity();
-    }
-
-    public double getBRVelocity() {
-        return BRMotor.getSelectedSensorVelocity();
-    }
-
-    public double getFLEncoderPosition() {
-        return FLMotor.getSelectedSensorPosition();
-    }
-
-    public double getBLEncoderPosition() {
-        return BLMotor.getSelectedSensorPosition();
-    }
-
-    public double getFREncoderPosition() {
-        return FRMotor.getSelectedSensorPosition();
-    }
-
-    public double getBREncoderPosition() {
-        return BRMotor.getSelectedSensorPosition();
-    }
-
-    public PIDController getFLPID() {
-        return FLPID;
-    }
-
-    public PIDController getBLPID() {
-        return BLPID;
-    }
-
-    public PIDController getFRPID() {
-        return FRPID;
-    }
-
-    public PIDController getBRPID() {
-        return BRPID;
-    }
-
-    public MecanumDriveKinematics getKinematics() {
-        return kinematics;
-    }
-
-    public MecanumDriveOdometry getOdometry() {
-        return odometry;
-    }
-
-    public SimpleMotorFeedforward getFeedForward() {
-        return feedForward;
-    }
-
+    
     public AHRS getGyro() {
         return gyro;
     }
@@ -277,14 +183,52 @@ public class DriveSubsystem extends SubsystemBase {
         gyro.reset();
     }
 
-    public void resetEncoders() {
-        FLMotor.setSelectedSensorPosition(0);
-        BLMotor.setSelectedSensorPosition(0);
-        FRMotor.setSelectedSensorPosition(0);
-        BRMotor.setSelectedSensorPosition(0);
+    public void resetOdometry(Pose2d pose) {
+        MotorUtil.resetEncoders(motors);
+        resetGyro();
+        System.out.println("WARNING! " + getHeading());
+        odometry.resetPosition(getHeading(), 
+            new MecanumDriveWheelPositions(0, 0, 0, 0),
+            pose);
     }
 
-    public void setFactory(WPI_TalonFX motor) {
-        motor.configFactoryDefault();
+    public void setFieldOriented() {
+        isFieldOriented = !isFieldOriented;
+    }
+
+    public boolean getFieldOriented() {
+        return isFieldOriented;
+    }
+
+    public MecanumDriveWheelSpeeds getWheelSpeeds() {
+        double flRotationsPerSecond = (double) MotorUtil.getMotorVelocity(motors[0]) / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double flVelocity = flRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
+
+        double frRotationsPerSecond = (double) MotorUtil.getMotorVelocity(motors[1]) / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double frVelocity = frRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
+
+        double blRotationsPerSecond = (double) MotorUtil.getMotorVelocity(motors[2]) / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double blVelocity = blRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
+
+        double brRotationsPerSecond = (double) MotorUtil.getMotorVelocity(motors[3]) / Drive.kEncoderResolution / Drive.kGearRatio * 10;
+        double brVelocity = brRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
+
+        return new MecanumDriveWheelSpeeds(flVelocity, frVelocity, blVelocity, brVelocity);
+    }
+
+    public PIDController getDrivePID(int num) {
+        return drivePID[num];
+    }
+
+    public MecanumDriveKinematics getKinematics() {
+        return kinematics;
+    }
+
+    public MecanumDriveOdometry getOdometry() {
+        return odometry;
+    }
+
+    public SimpleMotorFeedforward getFeedForward() {
+        return feedForward;
     }
 }

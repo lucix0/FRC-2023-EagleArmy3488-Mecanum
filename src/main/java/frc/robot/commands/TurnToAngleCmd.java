@@ -22,10 +22,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.Constants.*;
 import frc.robot.subsystems.DriveSubsystem;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // Uses PID control to align to the target angle using gyroscope feedback
 public class TurnToAngleCmd extends CommandBase {
@@ -65,7 +65,7 @@ public class TurnToAngleCmd extends CommandBase {
         System.out.println("error:" + error);
         System.out.println("value:" + value);
 
-        m_DriveSubsystem.mecanumDrive(0, 0, value); // drive with the calculated values
+        m_DriveSubsystem.drive(0, 0, value); // drive with the calculated values
     }
 
     // Called once the command ends or is interrupted.

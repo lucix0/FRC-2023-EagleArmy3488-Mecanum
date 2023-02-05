@@ -18,11 +18,11 @@ public class FourBarSubsystem extends SubsystemBase {
     private double speed;
 
     public FourBarSubsystem() {
-        speed = FB.kUpperSpeed;
-        fourBarMotorOne = new WPI_TalonFX(FB.kFourBarMotorOne);
+        speed = FourBar.kUpperSpeed;
+        fourBarMotorOne = new WPI_TalonFX(FourBar.kFourBarMotorOne);
         fourBarMotorOne.configFactoryDefault();
 
-        fourBarMotorTwo = new WPI_TalonFX(FB.kFourBarMotorTwo);
+        fourBarMotorTwo = new WPI_TalonFX(FourBar.kFourBarMotorTwo);
         fourBarMotorTwo.configFactoryDefault();
         fourBarMotorTwo.follow(fourBarMotorOne);
 
@@ -30,38 +30,38 @@ public class FourBarSubsystem extends SubsystemBase {
         fourBarMotorTwo.setNeutralMode(NeutralMode.Brake);
 
         // PID
-        fourBarMotorOne.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FB.kSlotIdx,
-                FB.kTimeoutMs);
-        fourBarMotorOne.config_kF(FB.kSlotIdx, FB.kF);
-        fourBarMotorOne.config_kP(FB.kSlotIdx, FB.kP);
-        fourBarMotorOne.config_kI(FB.kSlotIdx, FB.kI);
-        fourBarMotorOne.config_kD(FB.kSlotIdx, FB.kD);
-        fourBarMotorTwo.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FB.kSlotIdx,
-                FB.kTimeoutMs);
-        fourBarMotorTwo.config_kF(FB.kSlotIdx, FB.kF);
-        fourBarMotorTwo.config_kP(FB.kSlotIdx, FB.kP);
-        fourBarMotorTwo.config_kI(FB.kSlotIdx, FB.kI);
-        fourBarMotorTwo.config_kD(FB.kSlotIdx, FB.kD);
+        fourBarMotorOne.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
+                FourBar.kTimeoutMs);
+        fourBarMotorOne.config_kF(FourBar.kSlotIdx, FourBar.kF);
+        fourBarMotorOne.config_kP(FourBar.kSlotIdx, FourBar.kP);
+        fourBarMotorOne.config_kI(FourBar.kSlotIdx, FourBar.kI);
+        fourBarMotorOne.config_kD(FourBar.kSlotIdx, FourBar.kD);
+        fourBarMotorTwo.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
+                FourBar.kTimeoutMs);
+        fourBarMotorTwo.config_kF(FourBar.kSlotIdx, FourBar.kF);
+        fourBarMotorTwo.config_kP(FourBar.kSlotIdx, FourBar.kP);
+        fourBarMotorTwo.config_kI(FourBar.kSlotIdx, FourBar.kI);
+        fourBarMotorTwo.config_kD(FourBar.kSlotIdx, FourBar.kD);
     }
 
     public void run() {
-        if (speed == FB.kUpperSpeed) {
-            fourBarMotorOne.set(ControlMode.Position, FB.kUpperLimit);
-            fourBarMotorTwo.set(ControlMode.Position, FB.kUpperLimit);
+        if (speed == FourBar.kUpperSpeed) {
+            fourBarMotorOne.set(ControlMode.Position, FourBar.kUpperLimit);
+            fourBarMotorTwo.set(ControlMode.Position, FourBar.kUpperLimit);
             setToLower();
-        } else if (speed == FB.kLowerSpeed) {
-            fourBarMotorOne.set(ControlMode.Position, FB.kLowerLimit);
-            fourBarMotorTwo.set(ControlMode.Position, FB.kLowerLimit);
+        } else if (speed == FourBar.kLowerSpeed) {
+            fourBarMotorOne.set(ControlMode.Position, FourBar.kLowerLimit);
+            fourBarMotorTwo.set(ControlMode.Position, FourBar.kLowerLimit);
             setToRaise();
         }
     }
 
     public void setToRaise() {
-        speed = FB.kUpperSpeed;
+        speed = FourBar.kUpperSpeed;
     }
 
     public void setToLower() {
-        speed = FB.kLowerSpeed;
+        speed = FourBar.kLowerSpeed;
 
     }
 

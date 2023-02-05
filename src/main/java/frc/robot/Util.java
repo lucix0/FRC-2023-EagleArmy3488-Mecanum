@@ -8,5 +8,5 @@ public class Util {
             change = -change;
         }
         return change;
-    } 
+    }
 }

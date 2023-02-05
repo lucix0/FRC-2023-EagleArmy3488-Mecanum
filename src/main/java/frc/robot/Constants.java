@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 /**
@@ -39,6 +41,13 @@ public final class Constants {
         public static final double kWheelRadius = 3;
         public static final double kGearRatio = 10.71;
         public static final double kEncoderResolution = 2048;
+        public static final double kCenterToWheel = 0.305;
+        public static final MecanumDriveKinematics kKinematics = new MecanumDriveKinematics(
+            new Translation2d( Drive.kCenterToWheel,  Drive.kCenterToWheel), 
+            new Translation2d( Drive.kCenterToWheel, -Drive.kCenterToWheel), 
+            new Translation2d(-Drive.kCenterToWheel,  Drive.kCenterToWheel), 
+            new Translation2d(-Drive.kCenterToWheel, -Drive.kCenterToWheel)
+        );
 
         // Characterization Constants
         public static final double kP = 2.8287;
@@ -80,7 +89,7 @@ public final class Constants {
         public static final String[] names = { "PathONE", "PathTWO", "Straight" };
     }
 
-    public static class Grab {
+    public static class Grabber {
         // CAN IDs
         public static final int kGrabberMotorID = 0;
         
@@ -100,7 +109,7 @@ public final class Constants {
         public final static double kVoltage = 0;
     }
 
-    public static class FB {
+    public static class FourBar {
         public static final int kSlotIdx = 0;
         
         public static final double kF = 0;
@@ -120,7 +129,7 @@ public final class Constants {
     
     }
 
-    public static class Extend {
+    public static class Extender {
         public static final int kSlotIdx = 0;
     
         public static final double kF = 0;

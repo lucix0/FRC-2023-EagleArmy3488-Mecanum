@@ -1,26 +1,31 @@
 package frc.robot.commands;
 
-import static frc.robot.Constants.Controller;
-
-import java.util.function.Supplier;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.*;
 import frc.robot.Range;
 import frc.robot.Util;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class MecanumDriveCmd extends CommandBase {
-    private final DriveSubsystem driveTrain;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import java.util.function.Supplier;
+
+public class DriveCmd extends CommandBase {
+    private DriveSubsystem m_DriveSubsystem;
     private Supplier<Double> zSpeedFunc, xSpeedFunc, zRotationFunc;
 
-    public MecanumDriveCmd(DriveSubsystem driveTrain, Supplier<Double> zSpeedFunc, Supplier<Double> xSpeedFunc, Supplier<Double> zRotationFunc) {
-        this.driveTrain = driveTrain;
+    public DriveCmd(DriveSubsystem driveSubsystem, Supplier<Double> zSpeedFunc, Supplier<Double> xSpeedFunc, Supplier<Double> zRotationFunc) {
+        m_DriveSubsystem = driveSubsystem;
         this.zSpeedFunc = zSpeedFunc;
         this.xSpeedFunc = xSpeedFunc;
         this.zRotationFunc = zRotationFunc;
-        addRequirements(driveTrain);
+        addRequirements(m_DriveSubsystem);
     }
 
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {  }
+
+    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         double zSpeed = zSpeedFunc.get();
@@ -49,9 +54,14 @@ public class MecanumDriveCmd extends CommandBase {
         }   
 
         // Y-axis must be flipped because up on the left stick is neg.
-        driveTrain.mecanumDrive(-newZSpeed, newXSpeed, newZRotation);
+        m_DriveSubsystem.drive(-newZSpeed, newXSpeed, newZRotation);
     }
 
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {  }
+
+    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         return false;

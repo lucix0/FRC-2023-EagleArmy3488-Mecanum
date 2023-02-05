@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.Controller;
 import frc.robot.commands.FourBarActCmd;
 import frc.robot.commands.GrabCmd;
-import frc.robot.commands.MecanumDriveCmd;
+import frc.robot.commands.DriveCmd;
 import frc.robot.commands.SetOrientationCmd;
 import frc.robot.commands.auto.TestOneAuto;
 import frc.robot.subsystems.DriveSubsystem;
@@ -54,7 +54,7 @@ public class RobotContainer {
         routineChooser.addOption("Test Routine 1", testRoutine1.getCommand());
         SmartDashboard.putData("Auto Routines", routineChooser);
 
-        driveTrain.setDefaultCommand(new MecanumDriveCmd(driveTrain, () -> driveController.getLeftY(),
+        driveTrain.setDefaultCommand(new DriveCmd(driveTrain, () -> driveController.getLeftY(),
                 () -> driveController.getLeftX(), () -> driveController.getRightX()));
     }
 

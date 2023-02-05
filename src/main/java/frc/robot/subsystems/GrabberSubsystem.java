@@ -16,16 +16,16 @@ public class GrabberSubsystem extends SubsystemBase {
     private SimpleMotorFeedforward feedForward;
 
     public GrabberSubsystem() {
-        grabberMotor = new WPI_TalonFX(Grab.kGrabberMotorID);
+        grabberMotor = new WPI_TalonFX(Grabber.kGrabberMotorID);
         grabberMotor.configFactoryDefault();
-        thresh = Grab.kThresh;
+        thresh = Grabber.kThresh;
 
-        pidController = new PIDController(Grab.kP, Grab.kI, Grab.kD);
-        feedForward = new SimpleMotorFeedforward(Grab.kS, Grab.kV, Grab.kA);
+        pidController = new PIDController(Grabber.kP, Grabber.kI, Grabber.kD);
+        feedForward = new SimpleMotorFeedforward(Grabber.kS, Grabber.kV, Grabber.kA);
     }
 
     public void grab() {
-        grabberMotor.setVoltage(Grab.kVoltage);
+        grabberMotor.setVoltage(Grabber.kVoltage);
     }
 
     public void stop() {
@@ -34,7 +34,7 @@ public class GrabberSubsystem extends SubsystemBase {
 
     public void reverse() {
         grabberMotor.setInverted(true);
-        grabberMotor.setVoltage(Grab.kVoltage);
+        grabberMotor.setVoltage(Grabber.kVoltage);
     }
 
     
