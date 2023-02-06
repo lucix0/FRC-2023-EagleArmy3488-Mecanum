@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.*;
 import frc.robot.MotorUtil;
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -48,6 +48,7 @@ public class DriveSubsystem extends SubsystemBase {
     public double zRotation;
 
     private boolean isFieldOriented;
+    private boolean isBraking;
 
     public DriveSubsystem() {
         // Motors are created and configured.
@@ -81,6 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
         drivePID[3] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
 
         isFieldOriented = false;
+        isBraking = false;
 
         // Motors aren't in order because this class' motor order is different.
         driveTrain = new MecanumDrive(motors[0], motors[2], motors[1], motors[3]);
@@ -107,6 +109,11 @@ public class DriveSubsystem extends SubsystemBase {
         this.zSpeed = zSpeed;
         this.xSpeed = xSpeed;
         this.zRotation = zRotation;
+
+        // Modify speeds and rotations to slow robot.
+        if (isBraking) {
+           
+        }
 
         if (!isFieldOriented) {
             driveTrain.driveCartesian(zSpeed, xSpeed, zRotation);
@@ -198,6 +205,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     public boolean getFieldOriented() {
         return isFieldOriented;
+    }
+
+    public void setBraking() {
+        isBraking = !isBraking;
+    }
+
+    public boolean getBraking() {
+        return isBraking;
     }
 
     public MecanumDriveWheelSpeeds getWheelSpeeds() {

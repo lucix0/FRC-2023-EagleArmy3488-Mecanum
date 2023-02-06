@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.Controller;
+import frc.robot.commands.BrakeCmd;
 import frc.robot.commands.DriveCmd;
 import frc.robot.commands.SetOrientationCmd;
 import frc.robot.commands.auto.TestOneAuto;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExtenderSubsystem;
 import frc.robot.subsystems.FourBarSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -65,8 +67,11 @@ public class RobotContainer {
         Trigger opLeftTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() >= 0.1);
         Trigger opRightTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() >= 0.1);
 
-        new JoystickButton(driveController, XboxController.Button.kLeftStick.value)
+        // Driver.
+        new JoystickButton(driveController, XboxController.Button.kLeftBumper.value)
             .onTrue(new SetOrientationCmd(m_DriveSubsystem));
+        new JoystickButton(driveController, XboxController.Button.kRightBumper.value)
+            .onTrue(new BrakeCmd(m_DriveSubsystem));
     }
 
     public Command getAutonomousCommand() {
