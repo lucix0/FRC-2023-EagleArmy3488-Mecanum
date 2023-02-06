@@ -47,6 +47,10 @@ public class DriveSubsystem extends SubsystemBase {
     public double xSpeed;
     public double zRotation;
 
+    public double prevZSpeed;
+    public double prevXSpeed;
+    public double prevZRotation;
+
     private boolean isFieldOriented;
     private boolean isBraking;
 
@@ -81,6 +85,10 @@ public class DriveSubsystem extends SubsystemBase {
         drivePID[2] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
         drivePID[3] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
 
+        prevZSpeed = 0.0;
+        prevXSpeed = 0.0;
+        prevZRotation = 0.0;
+
         isFieldOriented = false;
         isBraking = false;
 
@@ -110,16 +118,24 @@ public class DriveSubsystem extends SubsystemBase {
         this.xSpeed = xSpeed;
         this.zRotation = zRotation;
 
+        
+
         // Modify speeds and rotations to slow robot.
         if (isBraking) {
-           
+           zSpeed = MathUtil.clamp(prevZSpeed, 0.0, prevZSpeed*Drive.kBrakeRate);
+           xSpeed = MathUtil.clamp(prevXSpeed, 0.0, prevXSpeed*Drive.kBrakeRate);
+           zRotation = MathUtil.clamp(prevZRotation, 0.0, prevZRotation*Drive.kBrakeRate);
         }
 
         if (!isFieldOriented) {
             driveTrain.driveCartesian(zSpeed, xSpeed, zRotation);
         } else {
-            driveTrain.driveCartesian(zSpeed, xSpeed, zRotation, Rotation2d.fromDegrees(gyro.getAngle()));
+            driveTrain.driveCartesian(zSpeed, xSpeed, zRotation, Rotation2d.fromDegrees(getAngle()));
         }
+
+        this.prevZSpeed = this.zSpeed;
+        this.prevXSpeed = this.xSpeed;
+        this.prevZRotation = this.zRotation;
     }
 
     private void configureMotors(WPI_TalonFX FLMotor, WPI_TalonFX FRMotor, WPI_TalonFX BLMotor, WPI_TalonFX BRMotor) {

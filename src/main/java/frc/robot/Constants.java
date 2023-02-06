@@ -37,6 +37,9 @@ public final class Constants {
         // Ramp val
         public static final double kRampInSec = 0.1875;
 
+        // Braking.
+        public static final double kBrakeRate = 0.90;
+
         // Physical Robot Properties (in inches)
         public static final double kWheelRadius = 3;
         public static final double kGearRatio = 10.71;
