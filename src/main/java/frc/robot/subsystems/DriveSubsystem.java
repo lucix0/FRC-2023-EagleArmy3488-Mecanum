@@ -118,8 +118,6 @@ public class DriveSubsystem extends SubsystemBase {
         this.xSpeed = xSpeed;
         this.zRotation = zRotation;
 
-        
-
         // Modify speeds and rotations to slow robot.
         if (isBraking) {
            zSpeed = MathUtil.clamp(prevZSpeed, 0.0, prevZSpeed*Drive.kBrakeRate);

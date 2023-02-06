@@ -41,6 +41,7 @@ public final class Constants {
         public static final double kBrakeRate = 0.90;
 
         // Physical Robot Properties (in inches)
+        public static final double kTrackWidth = 22;
         public static final double kWheelRadius = 3;
         public static final double kGearRatio = 10.71;
         public static final double kEncoderResolution = 2048;
@@ -59,6 +60,8 @@ public final class Constants {
         public static final double kS = 0.054208;
         public static final double kV = 2.474;
         public static final double kA = 0.21718;
+        public static final double kRamseteB = 2;
+        public static final double kRamseteZeta = 0.7;
 
         public static final double kThetaP = 2.12312;
 
