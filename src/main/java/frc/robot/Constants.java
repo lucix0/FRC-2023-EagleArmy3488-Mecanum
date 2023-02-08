@@ -84,7 +84,7 @@ public final class Constants {
     }
 
     public static class Path {
-        public static final String[] names = { "PathONE", "PathTWO", "Straight" };
+        public static final String[] names = { "PathONE", "PathTWO", "NotStraight" };
     }
 
     public static class Grabber {

@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 
-public class TestOneAuto {
+public class AutoTest1 {
     private DriveSubsystem m_DriveSubsystem;
 
     private PathPlannerTrajectory path;
 
-    public TestOneAuto(Trajectories paths, DriveSubsystem driveSubsystem) {  
-        path = paths.getTrajectory("Straight");
+    public AutoTest1(Trajectories paths, DriveSubsystem driveSubsystem) {  
+        path = paths.getTrajectory("NotStraight");
         m_DriveSubsystem = driveSubsystem;
     }
 

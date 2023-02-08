@@ -26,16 +26,22 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/SmartDashboard/Drive/Robot Heading": "Gyro",
+      "/Shuffleboard/SmartDashboard/Routine Select": "String Chooser",
       "/SmartDashboard/Auto Routines": "String Chooser",
       "/SmartDashboard/GyroHeading": "Gyro",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
   },
-  "NetworkTables": {
-    "transitory": {
-      "SmartDashboard": {
-        "open": true
-      }
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "open": true
     }
   }
 }
