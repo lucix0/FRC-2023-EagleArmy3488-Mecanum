@@ -57,6 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public DriveSubsystem() {
         // Motors are created and configured.
+        motors = new WPI_TalonFX[4];
         motors[0] = new WPI_TalonFX(RobotMap.kFLMotorID);
         motors[1] = new WPI_TalonFX(RobotMap.kFRMotorID);
         motors[2] = new WPI_TalonFX(RobotMap.kBLMotorID);
@@ -81,6 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
             )
         );
         feedForward = new SimpleMotorFeedforward(Drive.kS, Drive.kV, Drive.kA);
+        drivePID = new PIDController[4];
         drivePID[0] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
         drivePID[1] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
         drivePID[2] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
@@ -208,7 +210,6 @@ public class DriveSubsystem extends SubsystemBase {
     public void resetOdometry(Pose2d pose) {
         MotorUtil.resetEncoders(motors);
         resetGyro();
-        System.out.println("WARNING! " + getHeading());
         odometry.resetPosition(getHeading(), 
             new MecanumDriveWheelPositions(0, 0, 0, 0),
             pose);

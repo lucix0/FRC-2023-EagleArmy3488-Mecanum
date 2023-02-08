@@ -36,9 +36,5 @@ public class GrabberSubsystem extends SubsystemBase {
     public void reverse() {
         grabberMotor.setInverted(true);
         grabberMotor.setVoltage(Grabber.kVoltage);
-    }
-
-    
-    
-         
-    }
+    }   
+}
