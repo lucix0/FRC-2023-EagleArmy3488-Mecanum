@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.RobotMap;
 import frc.robot.Constants.*;
 
 public class ExtenderSubsystem extends SubsystemBase {
@@ -19,10 +19,10 @@ public class ExtenderSubsystem extends SubsystemBase {
 
     public ExtenderSubsystem() {
         speed = Extender.kRaiseSpeed;
-        extenderMotorOne = new WPI_TalonFX(Extender.kExtenderMotorOne);
+        extenderMotorOne = new WPI_TalonFX(RobotMap.kExtenderMotorID1);
         extenderMotorOne.configFactoryDefault();
 
-        extenderMotorTwo = new WPI_TalonFX(Extender.kExtenderMotorTwo);
+        extenderMotorTwo = new WPI_TalonFX(RobotMap.kExtenderMotorID2);
         extenderMotorTwo.configFactoryDefault();
         extenderMotorTwo.follow(extenderMotorOne);
 

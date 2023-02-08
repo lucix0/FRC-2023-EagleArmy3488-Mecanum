@@ -18,18 +18,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  */
 public final class Constants {
     public static class Controller {
-        public static final int kDriverPort = 0;
-        public static final int kOperatorPort = 1;
         public static final double kDeadzone = 0.15;
     }
 
     public static class Drive {
-        // CAN ids.
-        public static final int kFLMotorID = 3;
-        public static final int kBLMotorID = 1;
-        public static final int kFRMotorID = 4;
-        public static final int kBRMotorID = 2;
-
         // Direction constants.
         public static final boolean kLeftInverted = false;
         public static final boolean kRightInverted = true;
@@ -96,9 +88,6 @@ public final class Constants {
     }
 
     public static class Grabber {
-        // CAN IDs
-        public static final int kGrabberMotorID = 0;
-        
         // Characterization Values
         public final static double kS = 0;
         public final static double kV = 0;
@@ -125,9 +114,6 @@ public final class Constants {
     
         public static final int kTimeoutMs = 30;
     
-        public static final int kFourBarMotorOne = 0;
-        public static final int kFourBarMotorTwo = 1;
-    
         public static final double kUpperSpeed = 0.2;
         public static final double kLowerSpeed = 0.2;
         public static final double kLowerLimit = 0;
@@ -145,9 +131,6 @@ public final class Constants {
 
         public static final int kTimeoutMs = 30;
 
-        public static final int kExtenderMotorOne = 0;
-        public static final int kExtenderMotorTwo = 1;
-        
         public static final double kRaiseSpeed = 0.2;
         public static final double kDropSpeed = 0.2;
         public static final double kRaiseLimit = 0;

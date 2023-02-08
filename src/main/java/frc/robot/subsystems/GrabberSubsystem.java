@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
 import frc.robot.Constants.*;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -16,7 +17,7 @@ public class GrabberSubsystem extends SubsystemBase {
     private SimpleMotorFeedforward feedForward;
 
     public GrabberSubsystem() {
-        grabberMotor = new WPI_TalonFX(Grabber.kGrabberMotorID);
+        grabberMotor = new WPI_TalonFX(RobotMap.kGrabberMotorID);
         grabberMotor.configFactoryDefault();
         thresh = Grabber.kThresh;
 

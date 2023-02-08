@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
 import frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -19,10 +20,10 @@ public class FourBarSubsystem extends SubsystemBase {
 
     public FourBarSubsystem() {
         speed = FourBar.kUpperSpeed;
-        fourBarMotorOne = new WPI_TalonFX(FourBar.kFourBarMotorOne);
+        fourBarMotorOne = new WPI_TalonFX(RobotMap.kFourBarMotorID1);
         fourBarMotorOne.configFactoryDefault();
 
-        fourBarMotorTwo = new WPI_TalonFX(FourBar.kFourBarMotorTwo);
+        fourBarMotorTwo = new WPI_TalonFX(RobotMap.kFourBarMotorID2);
         fourBarMotorTwo.configFactoryDefault();
         fourBarMotorTwo.follow(fourBarMotorOne);
 

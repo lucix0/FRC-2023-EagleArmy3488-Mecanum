@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.*;
-import frc.robot.MotorUtil;
+import frc.lib.MotorUtil;
+import frc.robot.RobotMap;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -56,10 +57,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public DriveSubsystem() {
         // Motors are created and configured.
-        motors[0] = new WPI_TalonFX(Drive.kFLMotorID);
-        motors[1] = new WPI_TalonFX(Drive.kFRMotorID);
-        motors[2] = new WPI_TalonFX(Drive.kBLMotorID);
-        motors[3] = new WPI_TalonFX(Drive.kBRMotorID);
+        motors[0] = new WPI_TalonFX(RobotMap.kFLMotorID);
+        motors[1] = new WPI_TalonFX(RobotMap.kFRMotorID);
+        motors[2] = new WPI_TalonFX(RobotMap.kBLMotorID);
+        motors[3] = new WPI_TalonFX(RobotMap.kBRMotorID);
         configureMotors(motors[0], motors[1], motors[2], motors[3]);
         
         // Odometry and gyro setup.
