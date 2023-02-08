@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.*;
-import frc.robot.Range;
-import frc.robot.Util;
+import frc.lib.Range;
+import frc.lib.Util;
 import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;

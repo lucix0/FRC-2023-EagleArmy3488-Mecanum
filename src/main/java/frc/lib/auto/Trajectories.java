@@ -1,9 +1,9 @@
-package frc.robot;
-
-import static frc.robot.Constants.Path;
+package frc.lib.auto;
 
 import java.util.HashMap;
 import com.pathplanner.lib.*;
+
+import frc.robot.Constants.Path;
 
 public class Trajectories {
     private HashMap<String, PathPlannerTrajectory> paths;

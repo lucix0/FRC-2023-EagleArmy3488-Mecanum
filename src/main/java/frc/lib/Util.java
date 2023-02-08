@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.lib;
 
 public class Util {
     // Sets sign of one value to match another

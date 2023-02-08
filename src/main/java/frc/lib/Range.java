@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.lib;
 
 public class Range {
     private double upper = 0;

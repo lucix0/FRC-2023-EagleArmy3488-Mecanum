@@ -1,7 +1,7 @@
 package frc.robot.commands.auto;
 
+import frc.lib.auto.Trajectories;
 import frc.robot.Constants.*;
-import frc.robot.Trajectories;
 import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.math.controller.PIDController;
