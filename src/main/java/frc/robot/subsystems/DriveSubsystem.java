@@ -8,6 +8,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
@@ -38,6 +41,9 @@ public class DriveSubsystem extends SubsystemBase {
     private MecanumDriveKinematics kinematics;
     private MecanumDriveOdometry odometry;
 
+    private DifferentialDriveKinematics tankKinematics;
+    private PIDController leftPIDController, rightPIDController;
+
     private SimpleMotorFeedforward feedForward;
     private PIDController[] drivePID;
 
@@ -54,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     private boolean isFieldOriented;
     private boolean isBraking;
+    private boolean isTank;
 
     public DriveSubsystem() {
         // Motors are created and configured.
@@ -88,12 +95,18 @@ public class DriveSubsystem extends SubsystemBase {
         drivePID[2] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
         drivePID[3] = new PIDController(Drive.kP, Drive.kI, Drive.kD);
 
+        tankKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(Drive.kTrackWidth));
+        
+        leftPIDController = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+        rightPIDController = new PIDController(Drive.kP, Drive.kI, Drive.kD);
+
         prevZSpeed = 0.0;
         prevXSpeed = 0.0;
         prevZRotation = 0.0;
 
         isFieldOriented = false;
         isBraking = false;
+        isTank = false;
 
         // Motors aren't in order because this class' motor order is different.
         driveTrain = new MecanumDrive(motors[0], motors[2], motors[1], motors[3]);
@@ -172,6 +185,11 @@ public class DriveSubsystem extends SubsystemBase {
         motors[4].setVoltage(volts.rearRightVoltage);
     }
 
+    public void setTankVolts(double left, double right) {
+        motors[0].setVoltage(left);
+        motors[1].setVoltage(right);
+    }
+
     public Pose2d updatePose() {
         Rotation2d gyroAngle = getHeading();
         var wheelPositions = new MecanumDriveWheelPositions(
@@ -181,6 +199,17 @@ public class DriveSubsystem extends SubsystemBase {
             MotorUtil.getMotorDistance(motors[3])
         );
         return odometry.update(gyroAngle, wheelPositions);
+    }
+
+    public void setFollow() {
+        if (!isTank) {
+            motors[3].follow(motors[0]);
+            motors[4].follow(motors[1]);
+        } else {
+            motors[3].follow(motors[3]);
+            motors[4].follow(motors[4]);
+        }
+        isTank = !isTank;
     }
 
     public Rotation2d getHeading() {
@@ -247,8 +276,25 @@ public class DriveSubsystem extends SubsystemBase {
         return new MecanumDriveWheelSpeeds(flVelocity, frVelocity, blVelocity, brVelocity);
     }
 
+    public DifferentialDriveWheelSpeeds getTankWheelSpeeds() {
+        // returns wheel speeds in m/s (meters per second)
+        double leftRotationsPerSecond = (double) MotorUtil.getMotorVelocity(motors[0]) / Drive.kEncoderResolution / Drive.kGearRatio * 10;        
+        double leftVelocity = leftRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
+        double rightRotationsPerSecond = (double) MotorUtil.getMotorVelocity(motors[1]) / Drive.kEncoderResolution / Drive.kGearRatio * 10;        
+        double rightVelocity = rightRotationsPerSecond * 2 * Math.PI * Units.inchesToMeters(Drive.kWheelRadius);
+        return new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
+    }
+
     public PIDController getDrivePID(int num) {
         return drivePID[num];
+    }
+
+    public PIDController getLeftPID() {
+        return leftPIDController;
+    }
+
+    public PIDController getRightPID() {
+        return rightPIDController;
     }
 
     public MecanumDriveKinematics getKinematics() {
@@ -257,6 +303,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public MecanumDriveOdometry getOdometry() {
         return odometry;
+    }
+
+    public DifferentialDriveKinematics getTankKinematics() {
+        return tankKinematics;
     }
 
     public SimpleMotorFeedforward getFeedForward() {

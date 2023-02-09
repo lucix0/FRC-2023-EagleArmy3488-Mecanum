@@ -18,7 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
  */
 public final class Constants {
     public static class Controller {
-        public static final double kDeadzone = 0.15;
+        public static final double kDeadband = 0.15;
     }
 
     public static class Drive {

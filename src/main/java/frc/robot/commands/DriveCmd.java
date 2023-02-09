@@ -32,23 +32,23 @@ public class DriveCmd extends CommandBase {
         double xSpeed = xSpeedFunc.get();
         double zRotation = zRotationFunc.get();
         
-        Range initial = new Range(1.00, Controller.kDeadzone);
+        Range initial = new Range(1.00, Controller.kDeadband);
         Range limited = new Range(1.00, 0.00);
         
         double newZSpeed = 0.0;
-        if (Math.abs(zSpeed) > Controller.kDeadzone - 0.01) {
+        if (Math.abs(zSpeed) > Controller.kDeadband - 0.01) {
             newZSpeed = Range.convert(Math.abs(zSpeed), initial, limited);
             newZSpeed = Util.matchSign(zSpeed, newZSpeed);
         }
         
         double newXSpeed = 0.0;
-        if (Math.abs(xSpeed) > Controller.kDeadzone - 0.01) {
+        if (Math.abs(xSpeed) > Controller.kDeadband - 0.01) {
             newXSpeed = Range.convert(Math.abs(xSpeed), initial, limited);
             newXSpeed = Util.matchSign(xSpeed, newXSpeed);
         }
 
         double newZRotation = 0.0;
-        if (Math.abs(zRotation) > Controller.kDeadzone - 0.01) {
+        if (Math.abs(zRotation) > Controller.kDeadband - 0.01) {
             newZRotation = Range.convert(Math.abs(zRotation), initial, limited);
             newZRotation = Util.matchSign(zRotation, newZRotation);
         }   
