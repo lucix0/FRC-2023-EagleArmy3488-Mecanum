@@ -108,16 +108,14 @@ public final class Constants {
         public static final int kSlotIdx = 0;
         
         public static final double kF = 0;
-        public static final double kP = 0;
+        public static final double kP = 0.1;
         public static final double kI = 0;
         public static final double kD = 0;
     
         public static final int kTimeoutMs = 30;
     
-        public static final double kUpperSpeed = 0.2;
-        public static final double kLowerSpeed = 0.2;
-        public static final double kLowerLimit = 0;
-        public static final double kUpperLimit = 0;
+        public static final double kRetractedPosition = 0;
+        public static final double kExtendedPosition = -1000;
     
     }
 
@@ -125,15 +123,13 @@ public final class Constants {
         public static final int kSlotIdx = 0;
     
         public static final double kF = 0;
-        public static final double kP = 0;
+        public static final double kP = 0.1;
         public static final double kI = 0;
         public static final double kD = 0;
 
         public static final int kTimeoutMs = 30;
 
-        public static final double kRaiseSpeed = 0.2;
-        public static final double kDropSpeed = 0.2;
-        public static final double kRaiseLimit = 0;
-        public static final double kDropLimit = 0;
+        public static final double kRetractedPosition = 0;
+        public static final double kExtendedPosition = -1000;
     }
 }

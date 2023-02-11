@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.lib.auto.Trajectories;
 import frc.robot.commands.DriveCmd;
+import frc.robot.commands.RunCmd;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExtenderSubsystem;
 import frc.robot.subsystems.FourBarSubsystem;
@@ -44,6 +45,8 @@ public class RobotContainer {
 
         m_DriveSubsystem.setDefaultCommand(new DriveCmd(m_DriveSubsystem, () -> controls.getDriverController().getLeftY(),
                 () -> controls.getDriverController().getLeftX(), () -> controls.getDriverController().getRightX()));
+        m_ExtenderSubsystem.setDefaultCommand(new RunCmd(m_ExtenderSubsystem));
+        m_FourBarSubsystem.setDefaultCommand(new RunCmd(m_FourBarSubsystem));
     }
 
     private void configureBindings() {  }

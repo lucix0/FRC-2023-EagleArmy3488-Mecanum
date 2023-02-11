@@ -11,78 +11,51 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class FourBarSubsystem extends SubsystemBase {
-    private WPI_TalonFX fourBarMotorOne, fourBarMotorTwo;
-    private double speed;
+public class FourBarSubsystem extends PositionalSubsystem {
+    private WPI_TalonFX fourBarMotor1, fourBarMotor2;
+    private boolean isRaised;
 
     public FourBarSubsystem() {
-        speed = FourBar.kUpperSpeed;
-        fourBarMotorOne = new WPI_TalonFX(RobotMap.kFourBarMotorID1);
-        fourBarMotorOne.configFactoryDefault();
+        isRaised = false;
+        fourBarMotor1 = new WPI_TalonFX(RobotMap.kFourBarMotorID1);
+        fourBarMotor1.configFactoryDefault();
 
-        fourBarMotorTwo = new WPI_TalonFX(RobotMap.kFourBarMotorID2);
-        fourBarMotorTwo.configFactoryDefault();
-        fourBarMotorTwo.follow(fourBarMotorOne);
+        fourBarMotor2 = new WPI_TalonFX(RobotMap.kFourBarMotorID2);
+        fourBarMotor2.configFactoryDefault();
 
-        fourBarMotorOne.setNeutralMode(NeutralMode.Brake);
-        fourBarMotorTwo.setNeutralMode(NeutralMode.Brake);
+        fourBarMotor2.follow(fourBarMotor1);
+
+        fourBarMotor1.setNeutralMode(NeutralMode.Brake);
+        fourBarMotor2.setNeutralMode(NeutralMode.Brake);
 
         // PID
-        fourBarMotorOne.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
-                FourBar.kTimeoutMs);
-        fourBarMotorOne.config_kF(FourBar.kSlotIdx, FourBar.kF);
-        fourBarMotorOne.config_kP(FourBar.kSlotIdx, FourBar.kP);
-        fourBarMotorOne.config_kI(FourBar.kSlotIdx, FourBar.kI);
-        fourBarMotorOne.config_kD(FourBar.kSlotIdx, FourBar.kD);
-        fourBarMotorTwo.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
-                FourBar.kTimeoutMs);
-        fourBarMotorTwo.config_kF(FourBar.kSlotIdx, FourBar.kF);
-        fourBarMotorTwo.config_kP(FourBar.kSlotIdx, FourBar.kP);
-        fourBarMotorTwo.config_kI(FourBar.kSlotIdx, FourBar.kI);
-        fourBarMotorTwo.config_kD(FourBar.kSlotIdx, FourBar.kD);
-    }
-
-    public void run() {
-        if (speed == FourBar.kUpperSpeed) {
-            fourBarMotorOne.set(ControlMode.Position, FourBar.kUpperLimit);
-            fourBarMotorTwo.set(ControlMode.Position, FourBar.kUpperLimit);
-            setToLower();
-        } else if (speed == FourBar.kLowerSpeed) {
-            fourBarMotorOne.set(ControlMode.Position, FourBar.kLowerLimit);
-            fourBarMotorTwo.set(ControlMode.Position, FourBar.kLowerLimit);
-            setToRaise();
-        }
-    }
-
-    public void setToRaise() {
-        speed = FourBar.kUpperSpeed;
-    }
-
-    public void setToLower() {
-        speed = FourBar.kLowerSpeed;
-
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public void stop() {
-        fourBarMotorTwo.set(0);
-        fourBarMotorOne.set(0);
-    }
-
-    public double getSpeed() {
-        return speed;
+        fourBarMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
+            FourBar.kTimeoutMs);
+        fourBarMotor1.config_kF(FourBar.kSlotIdx, FourBar.kF);
+        fourBarMotor1.config_kP(FourBar.kSlotIdx, FourBar.kP);
+        fourBarMotor1.config_kI(FourBar.kSlotIdx, FourBar.kI);
+        fourBarMotor1.config_kD(FourBar.kSlotIdx, FourBar.kD);
+        fourBarMotor2.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
+            FourBar.kTimeoutMs);
+        fourBarMotor2.config_kF(FourBar.kSlotIdx, FourBar.kF);
+        fourBarMotor2.config_kP(FourBar.kSlotIdx, FourBar.kP);
+        fourBarMotor2.config_kI(FourBar.kSlotIdx, FourBar.kI);
+        fourBarMotor2.config_kD(FourBar.kSlotIdx, FourBar.kD);
     }
 
     @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        SmartDashboard.putNumber("Upwards Position", fourBarMotorOne.getSelectedSensorPosition());
-        SmartDashboard.putNumber("Downwards Position", fourBarMotorTwo.getSelectedSensorPosition());
+    public void run() {
+        if (!isRaised) {
+            fourBarMotor1.set(ControlMode.Position, FourBar.kRetractedPosition);
+        } else {
+            fourBarMotor1.set(ControlMode.Position, FourBar.kExtendedPosition);
+        }
+    }
+
+    @Override
+    public void changePosition() {
+        isRaised = !isRaised;
     }
 }

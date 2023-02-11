@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.auto.Trajectories;
@@ -17,7 +16,7 @@ import frc.robot.subsystems.FourBarSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
 /* Responsible for managing and updating dashboard. */
-public class UI extends SubsystemBase {
+public class UI {
     // Subsystem references
     private final DriveSubsystem m_DriveSubsystem;
     private final ExtenderSubsystem m_ExtenderSubsystem;
@@ -54,11 +53,6 @@ public class UI extends SubsystemBase {
             .withWidget(BuiltInWidgets.kGyro)
             .withPosition(0, 0)
             .withSize(2, 2);
-    }
-
-    @Override
-    public void periodic() {
-
     }
 
     public Command getChosenAuto() {

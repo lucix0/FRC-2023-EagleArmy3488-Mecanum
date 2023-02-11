@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
@@ -181,8 +180,8 @@ public class DriveSubsystem extends SubsystemBase {
     public void setMotorVolts(MecanumDriveMotorVoltages volts) {
         motors[0].setVoltage(volts.frontLeftVoltage);
         motors[1].setVoltage(volts.frontRightVoltage);
-        motors[3].setVoltage(volts.rearLeftVoltage);
-        motors[4].setVoltage(volts.rearRightVoltage);
+        motors[2].setVoltage(volts.rearLeftVoltage);
+        motors[3].setVoltage(volts.rearRightVoltage);
     }
 
     public void setTankVolts(double left, double right) {
@@ -203,11 +202,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void setFollow() {
         if (!isTank) {
-            motors[3].follow(motors[0]);
-            motors[4].follow(motors[1]);
+            motors[2].follow(motors[0]);
+            motors[3].follow(motors[1]);
         } else {
+            motors[2].follow(motors[2]);
             motors[3].follow(motors[3]);
-            motors[4].follow(motors[4]);
         }
         isTank = !isTank;
     }

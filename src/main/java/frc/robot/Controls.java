@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Extender;
 import frc.robot.commands.BrakeCmd;
+import frc.robot.commands.ChangePositionCmd;
 import frc.robot.commands.SetOrientationCmd;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExtenderSubsystem;
@@ -67,6 +67,10 @@ public class Controls {
         // Driver controls.
         dLeftBumper.onTrue(new SetOrientationCmd(m_DriveSubsystem));
         dRightBumper.onTrue(new BrakeCmd(m_DriveSubsystem));
+
+        // Operator controls.
+        oA.onTrue(new ChangePositionCmd(m_ExtenderSubsystem));
+        oB.onTrue(new ChangePositionCmd(m_FourBarSubsystem));
     }
 
     public XboxController getDriverController() {
