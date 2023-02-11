@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
-import frc.robot.Constants.*;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import frc.robot.Constants.Grabber;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -12,29 +9,24 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class GrabberSubsystem extends SubsystemBase {
     private WPI_TalonFX grabberMotor;
 
-    private double thresh;
-    private PIDController pidController;
-    private SimpleMotorFeedforward feedForward;
+    private double speed;
 
     public GrabberSubsystem() {
         grabberMotor = new WPI_TalonFX(RobotMap.kGrabberMotorID);
         grabberMotor.configFactoryDefault();
-        thresh = Grabber.kThresh;
 
-        pidController = new PIDController(Grabber.kP, Grabber.kI, Grabber.kD);
-        feedForward = new SimpleMotorFeedforward(Grabber.kS, Grabber.kV, Grabber.kA);
+        speed = Grabber.kGrabSpeed;
     }
 
-    public void grab() {
-        grabberMotor.setVoltage(Grabber.kVoltage);
+    public void run() {
+        grabberMotor.set(speed);
     }
 
     public void stop() {
-        grabberMotor.setVoltage(0);
+        grabberMotor.set(0);
     }
 
-    public void reverse() {
-        grabberMotor.setInverted(true);
-        grabberMotor.setVoltage(Grabber.kVoltage);
-    }   
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
 }

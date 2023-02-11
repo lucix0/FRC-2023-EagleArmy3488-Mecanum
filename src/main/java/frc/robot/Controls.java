@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Grabber;
 import frc.robot.commands.BrakeCmd;
 import frc.robot.commands.ChangePositionCmd;
+import frc.robot.commands.SetGrabberSpeedCmd;
 import frc.robot.commands.SetOrientationCmd;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExtenderSubsystem;
@@ -71,6 +73,9 @@ public class Controls {
         // Operator controls.
         oA.onTrue(new ChangePositionCmd(m_ExtenderSubsystem));
         oB.onTrue(new ChangePositionCmd(m_FourBarSubsystem));
+        oDPadDown.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kDropSpeed));
+        oDPadLeft.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kShootSpeed));
+        oDPadRight.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kGrabSpeed));
     }
 
     public XboxController getDriverController() {

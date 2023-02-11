@@ -87,23 +87,6 @@ public final class Constants {
         public static final String[] names = { "PathONE", "PathTWO", "NotStraight" };
     }
 
-    public static class Grabber {
-        // Characterization Values
-        public final static double kS = 0;
-        public final static double kV = 0;
-        public final static double kA = 0;
-        public final static double kP = 0;
-        public final static double kI = 0;
-        public final static double kD = 0;
-    
-        public final static double kEncoderResolution = 2048;
-        public final static double kGearRatio = 1.5;
-        public final static double kWheelDiameter = 4;
-
-        public final static double kThresh = 0;
-        public final static double kVoltage = 0;
-    }
-
     public static class FourBar {
         public static final int kSlotIdx = 0;
         
@@ -131,5 +114,11 @@ public final class Constants {
 
         public static final double kRetractedPosition = 0;
         public static final double kExtendedPosition = -1000;
+    }
+
+    public static class Grabber {
+        public static final double kGrabSpeed = 0.0;
+        public static final double kDropSpeed = 0.0;
+        public static final double kShootSpeed = 0.0;
     }
 }
