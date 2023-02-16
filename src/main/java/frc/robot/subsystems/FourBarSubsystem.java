@@ -14,43 +14,41 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class FourBarSubsystem extends PositionalSubsystem {
     private WPI_TalonFX fourBarMotor1, fourBarMotor2;
+    private double currentPosition = FourBar.kRetractedPosition;
     private boolean isRaised;
 
     public FourBarSubsystem() {
         isRaised = false;
         fourBarMotor1 = new WPI_TalonFX(RobotMap.kFourBarMotorID1);
         fourBarMotor1.configFactoryDefault();
-
-        fourBarMotor2 = new WPI_TalonFX(RobotMap.kFourBarMotorID2);
-        fourBarMotor2.configFactoryDefault();
-
-        fourBarMotor2.follow(fourBarMotor1);
-
         fourBarMotor1.setNeutralMode(NeutralMode.Brake);
-        fourBarMotor2.setNeutralMode(NeutralMode.Brake);
-
-        // PID
         fourBarMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
             FourBar.kTimeoutMs);
         fourBarMotor1.config_kF(FourBar.kSlotIdx, FourBar.kF);
         fourBarMotor1.config_kP(FourBar.kSlotIdx, FourBar.kP);
         fourBarMotor1.config_kI(FourBar.kSlotIdx, FourBar.kI);
         fourBarMotor1.config_kD(FourBar.kSlotIdx, FourBar.kD);
+        fourBarMotor1.configMotionAcceleration(FourBar.kMaxAcceleration, FourBar.kTimeoutMs);
+        fourBarMotor1.configMotionCruiseVelocity(FourBar.kMaxVelocity, FourBar.kTimeoutMs);
+
+        fourBarMotor2 = new WPI_TalonFX(RobotMap.kFourBarMotorID2);
+        fourBarMotor2.configFactoryDefault();
+        fourBarMotor2.setNeutralMode(NeutralMode.Brake);
         fourBarMotor2.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
             FourBar.kTimeoutMs);
         fourBarMotor2.config_kF(FourBar.kSlotIdx, FourBar.kF);
         fourBarMotor2.config_kP(FourBar.kSlotIdx, FourBar.kP);
         fourBarMotor2.config_kI(FourBar.kSlotIdx, FourBar.kI);
         fourBarMotor2.config_kD(FourBar.kSlotIdx, FourBar.kD);
+        fourBarMotor2.configMotionAcceleration(FourBar.kMaxAcceleration, FourBar.kTimeoutMs);
+        fourBarMotor2.configMotionCruiseVelocity(FourBar.kMaxVelocity, FourBar.kTimeoutMs);
+        fourBarMotor2.follow(fourBarMotor1);
     }
 
     @Override
     public void run() {
-        if (!isRaised) {
-            fourBarMotor1.set(ControlMode.Position, FourBar.kRetractedPosition);
-        } else {
-            fourBarMotor1.set(ControlMode.Position, FourBar.kExtendedPosition);
-        }
+        currentPosition = !isRaised ? FourBar.kRetractedPosition : FourBar.kExtendedPosition;
+        fourBarMotor1.set(ControlMode.MotionMagic, currentPosition);
     }
 
     @Override

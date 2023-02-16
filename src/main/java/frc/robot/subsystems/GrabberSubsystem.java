@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
-import frc.robot.Constants.Grabber;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
   
 public class GrabberSubsystem extends SubsystemBase {
     private WPI_TalonFX grabberMotor;
-
     private double speed;
 
     public GrabberSubsystem() {

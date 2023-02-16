@@ -1,9 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Grabber;
 import frc.robot.commands.BrakeCmd;
 import frc.robot.commands.ChangePositionCmd;
@@ -13,6 +9,11 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExtenderSubsystem;
 import frc.robot.subsystems.FourBarSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
+
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /* Controller buttons are created and their actions are defined. */
 public class Controls {
@@ -69,13 +70,11 @@ public class Controls {
         // Driver controls.
         dLeftBumper.onTrue(new SetOrientationCmd(m_DriveSubsystem));
         dRightBumper.onTrue(new BrakeCmd(m_DriveSubsystem));
-
-        // Operator controls.
-        oA.onTrue(new ChangePositionCmd(m_ExtenderSubsystem));
-        oB.onTrue(new ChangePositionCmd(m_FourBarSubsystem));
-        oDPadDown.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kDropSpeed));
-        oDPadLeft.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kShootSpeed));
-        oDPadRight.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kGrabSpeed));
+        dA.onTrue(new ChangePositionCmd(m_ExtenderSubsystem));
+        dB.onTrue(new ChangePositionCmd(m_FourBarSubsystem));
+        dDPadDown.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kDropSpeed));
+        dDPadLeft.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kShootSpeed));
+        dDPadRight.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kGrabSpeed));
     }
 
     public XboxController getDriverController() {

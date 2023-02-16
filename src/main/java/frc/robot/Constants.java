@@ -98,8 +98,10 @@ public final class Constants {
         public static final int kTimeoutMs = 30;
     
         public static final double kRetractedPosition = 0;
-        public static final double kExtendedPosition = -1000;
-    
+        public static final double kExtendedPosition = 1000;
+        
+        public static final double kMaxVelocity = 0;
+        public static final double kMaxAcceleration = 0;
     }
 
     public static class Extender {
@@ -113,7 +115,10 @@ public final class Constants {
         public static final int kTimeoutMs = 30;
 
         public static final double kRetractedPosition = 0;
-        public static final double kExtendedPosition = -1000;
+        public static final double kExtendedPosition = 1000;
+
+        public static final double kMaxVelocity = 0;
+        public static final double kMaxAcceleration = 0;
     }
 
     public static class Grabber {
