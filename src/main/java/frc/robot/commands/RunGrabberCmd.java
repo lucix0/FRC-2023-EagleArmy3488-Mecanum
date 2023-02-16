@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GrabberSubsystem;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RunGrabberCmd extends CommandBase {
     private GrabberSubsystem m_GrabberSubsystem;
