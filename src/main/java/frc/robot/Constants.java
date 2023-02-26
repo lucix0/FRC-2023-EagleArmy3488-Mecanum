@@ -124,7 +124,6 @@ public final class Constants {
 
     public static class Grabber {
         public static final double kGrabSpeed = -0.6;
-        public static final double kDropSpeed = 0.1;
-        public static final double kShootSpeed = 0.0;
+        public static final double kDropSpeed = 0.3;
     }
 }

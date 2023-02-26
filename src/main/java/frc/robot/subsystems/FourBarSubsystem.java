@@ -15,10 +15,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class FourBarSubsystem extends PositionalSubsystem {
     private WPI_TalonFX fourBarMotor1, fourBarMotor2;
     private double currentPosition = FourBar.kRetractedPosition;
-    private boolean isRaised;
 
     public FourBarSubsystem() {
-        isRaised = false;
         fourBarMotor1 = new WPI_TalonFX(RobotMap.kFourBarMotorID1);
         fourBarMotor1.configFactoryDefault();
         fourBarMotor1.setSelectedSensorPosition(0);
@@ -51,12 +49,11 @@ public class FourBarSubsystem extends PositionalSubsystem {
 
     @Override
     public void run() {
-        currentPosition = !isRaised ? FourBar.kRetractedPosition : FourBar.kExtendedPosition;
         fourBarMotor1.set(ControlMode.MotionMagic, currentPosition);
     }
 
     @Override
-    public void changePosition() {
-        isRaised = !isRaised;
+    public void changePosition(double position) {
+        currentPosition = position;
     }
 }

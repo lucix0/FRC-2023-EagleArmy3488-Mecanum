@@ -1,11 +1,11 @@
 package frc.robot;
 
+import frc.robot.Constants.Extender;
+import frc.robot.Constants.FourBar;
 import frc.robot.Constants.Grabber;
 import frc.robot.commands.BrakeCmd;
-import frc.robot.commands.ChangeExtenderTargetCmd;
 import frc.robot.commands.ChangePositionCmd;
 import frc.robot.commands.RunGrabberCmd;
-import frc.robot.commands.SetGrabberSpeedCmd;
 import frc.robot.commands.SetOrientationCmd;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExtenderSubsystem;
@@ -13,6 +13,8 @@ import frc.robot.subsystems.FourBarSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -72,13 +74,43 @@ public class Controls {
         // Driver controls.
         dLeftBumper.onTrue(new SetOrientationCmd(m_DriveSubsystem));
         dRightBumper.onTrue(new BrakeCmd(m_DriveSubsystem));
-        dA.onTrue(new ChangePositionCmd(m_ExtenderSubsystem));
-        dB.onTrue(new ChangePositionCmd(m_FourBarSubsystem));
-        dY.whileTrue(new RunGrabberCmd(m_GrabberSubsystem));
-        dX.onTrue(new ChangeExtenderTargetCmd(m_ExtenderSubsystem));
-        dDPadDown.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kDropSpeed));
-        //dDPadLeft.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kShootSpeed));
-        dDPadUp.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kGrabSpeed));
+
+        // Operator controls.
+        // Set extender to grab.
+        oX.onTrue(
+            new ChangePositionCmd(m_ExtenderSubsystem, Extender.kExtendedGrabPosition)
+        );
+        // Moves all subsystems back to starting positions and states.
+        oA.onTrue(
+            new SequentialCommandGroup(
+                new ChangePositionCmd(m_ExtenderSubsystem, Extender.kRetractedPosition),
+                new ChangePositionCmd(m_FourBarSubsystem, FourBar.kRetractedPosition)
+            )
+        );
+        // Set subsystems to place low.
+        oDPadDown.onTrue(
+            new ChangePositionCmd(m_ExtenderSubsystem, Extender.kExtendedPlacePosition)
+        );
+        // Sets subsystems to place cube high.
+        oDPadLeft.onTrue(
+            new SequentialCommandGroup(
+                new ChangePositionCmd(m_FourBarSubsystem, FourBar.kExtendedPosition),
+                new WaitCommand(4), // Change to be actually dependent on FB finishing.
+                new ChangePositionCmd(m_ExtenderSubsystem, Extender.kExtendedGrabPosition) // Cube placing needs to be done with grab position.
+            )
+        );
+        // Sets subsystems to place cone high.
+        oDPadRight.onTrue(
+            new SequentialCommandGroup(
+                new ChangePositionCmd(m_FourBarSubsystem, FourBar.kExtendedPosition),
+                new WaitCommand(4), // Change to be actually dependent on FB finishing.
+                new ChangePositionCmd(m_ExtenderSubsystem, Extender.kExtendedPlacePosition)
+            )
+        );
+        
+        // Claw control.
+        oRightBumper.whileTrue(new RunGrabberCmd(m_GrabberSubsystem, Grabber.kGrabSpeed));
+        oRightTrigger.whileTrue(new RunGrabberCmd(m_GrabberSubsystem, Grabber.kDropSpeed));
     }
 
     public XboxController getDriverController() {

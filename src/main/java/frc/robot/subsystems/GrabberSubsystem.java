@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
-import frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -14,11 +13,9 @@ public class GrabberSubsystem extends SubsystemBase {
     public GrabberSubsystem() {
         grabberMotor = new WPI_TalonFX(RobotMap.kGrabberMotorID);
         grabberMotor.configFactoryDefault();
-
-        speed = Grabber.kGrabSpeed;
     }
 
-    public void run() {
+    public void run(double speed) {
         grabberMotor.set(speed);
     }
 

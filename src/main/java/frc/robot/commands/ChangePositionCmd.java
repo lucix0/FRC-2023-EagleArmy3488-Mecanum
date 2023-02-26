@@ -6,9 +6,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ChangePositionCmd extends CommandBase {
     private PositionalSubsystem m_Subsystem;
+    private double m_position;
 
-    public ChangePositionCmd(PositionalSubsystem subsystem) {
+    public ChangePositionCmd(PositionalSubsystem subsystem, double position) {
         m_Subsystem = subsystem;
+        m_position = position;
         addRequirements(m_Subsystem);
     }
 
@@ -19,7 +21,7 @@ public class ChangePositionCmd extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() { 
-        m_Subsystem.changePosition();
+        m_Subsystem.changePosition(m_position);
     }
 
     // Called once the command ends or is interrupted.
