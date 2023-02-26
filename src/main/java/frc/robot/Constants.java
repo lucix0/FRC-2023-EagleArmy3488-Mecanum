@@ -98,10 +98,10 @@ public final class Constants {
         public static final int kTimeoutMs = 30;
     
         public static final double kRetractedPosition = 0;
-        public static final double kExtendedPosition = 1000;
+        public static final double kExtendedPosition = 43000;
         
-        public static final double kMaxVelocity = 0;
-        public static final double kMaxAcceleration = 0;
+        public static final double kMaxVelocity = 20000;
+        public static final double kMaxAcceleration = 750;
     }
 
     public static class Extender {
@@ -115,15 +115,16 @@ public final class Constants {
         public static final int kTimeoutMs = 30;
 
         public static final double kRetractedPosition = 0;
-        public static final double kExtendedPosition = 1000;
+        public static final double kExtendedGrabPosition = 28000; // 28000 = grabbing
+        public static final double kExtendedPlacePosition = 34500;
 
-        public static final double kMaxVelocity = 0;
-        public static final double kMaxAcceleration = 0;
+        public static final double kMaxVelocity = 20000;
+        public static final double kMaxAcceleration = 2000;
     }
 
     public static class Grabber {
-        public static final double kGrabSpeed = 0.0;
-        public static final double kDropSpeed = 0.0;
+        public static final double kGrabSpeed = -0.6;
+        public static final double kDropSpeed = 0.1;
         public static final double kShootSpeed = 0.0;
     }
 }

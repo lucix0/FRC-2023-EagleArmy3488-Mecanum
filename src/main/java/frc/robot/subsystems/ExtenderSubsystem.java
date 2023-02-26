@@ -15,12 +15,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class ExtenderSubsystem extends PositionalSubsystem {
     private WPI_TalonFX extenderMotor1, extenderMotor2;
     private double currentPosition = Extender.kRetractedPosition;
-    private boolean isRaised;
+    private boolean isRaised = false;
+    public boolean grabbing = true;
 
     public ExtenderSubsystem() {
         isRaised = false;
         extenderMotor1 = new WPI_TalonFX(RobotMap.kExtenderMotorID1);
         extenderMotor1.configFactoryDefault();
+        extenderMotor1.setSelectedSensorPosition(0);
         extenderMotor1.setNeutralMode(NeutralMode.Brake);
         extenderMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
             Extender.kSlotIdx, Extender.kTimeoutMs);
@@ -33,7 +35,9 @@ public class ExtenderSubsystem extends PositionalSubsystem {
 
         extenderMotor2 = new WPI_TalonFX(RobotMap.kExtenderMotorID2);
         extenderMotor2.configFactoryDefault();
+        extenderMotor2.setSelectedSensorPosition(0);
         extenderMotor2.setNeutralMode(NeutralMode.Brake);
+        extenderMotor2.setInverted(true);
         extenderMotor2.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
             Extender.kSlotIdx, Extender.kTimeoutMs);
         extenderMotor2.config_kF(Extender.kSlotIdx, Extender.kF);
@@ -47,7 +51,8 @@ public class ExtenderSubsystem extends PositionalSubsystem {
 
     @Override
     public void run() {
-        currentPosition = !isRaised ? Extender.kRetractedPosition : Extender.kExtendedPosition;
+        double targetPosition = grabbing ? Extender.kExtendedGrabPosition : Extender.kExtendedPlacePosition;
+        currentPosition = !isRaised ? Extender.kRetractedPosition : targetPosition;
         extenderMotor1.set(ControlMode.MotionMagic, currentPosition);
     }
 

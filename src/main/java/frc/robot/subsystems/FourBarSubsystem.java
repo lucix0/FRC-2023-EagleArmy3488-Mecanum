@@ -21,7 +21,9 @@ public class FourBarSubsystem extends PositionalSubsystem {
         isRaised = false;
         fourBarMotor1 = new WPI_TalonFX(RobotMap.kFourBarMotorID1);
         fourBarMotor1.configFactoryDefault();
+        fourBarMotor1.setSelectedSensorPosition(0);
         fourBarMotor1.setNeutralMode(NeutralMode.Brake);
+        fourBarMotor1.setInverted(true);
         fourBarMotor1.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
             FourBar.kTimeoutMs);
         fourBarMotor1.config_kF(FourBar.kSlotIdx, FourBar.kF);
@@ -33,9 +35,11 @@ public class FourBarSubsystem extends PositionalSubsystem {
 
         fourBarMotor2 = new WPI_TalonFX(RobotMap.kFourBarMotorID2);
         fourBarMotor2.configFactoryDefault();
+        fourBarMotor2.setSelectedSensorPosition(0);
         fourBarMotor2.setNeutralMode(NeutralMode.Brake);
         fourBarMotor2.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, FourBar.kSlotIdx,
             FourBar.kTimeoutMs);
+        
         fourBarMotor2.config_kF(FourBar.kSlotIdx, FourBar.kF);
         fourBarMotor2.config_kP(FourBar.kSlotIdx, FourBar.kP);
         fourBarMotor2.config_kI(FourBar.kSlotIdx, FourBar.kI);

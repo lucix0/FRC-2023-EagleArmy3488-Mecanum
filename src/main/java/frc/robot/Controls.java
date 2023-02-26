@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.Grabber;
 import frc.robot.commands.BrakeCmd;
+import frc.robot.commands.ChangeExtenderTargetCmd;
 import frc.robot.commands.ChangePositionCmd;
 import frc.robot.commands.RunGrabberCmd;
 import frc.robot.commands.SetGrabberSpeedCmd;
@@ -73,10 +74,11 @@ public class Controls {
         dRightBumper.onTrue(new BrakeCmd(m_DriveSubsystem));
         dA.onTrue(new ChangePositionCmd(m_ExtenderSubsystem));
         dB.onTrue(new ChangePositionCmd(m_FourBarSubsystem));
-        dY.onTrue(new RunGrabberCmd(m_GrabberSubsystem));
+        dY.whileTrue(new RunGrabberCmd(m_GrabberSubsystem));
+        dX.onTrue(new ChangeExtenderTargetCmd(m_ExtenderSubsystem));
         dDPadDown.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kDropSpeed));
-        dDPadLeft.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kShootSpeed));
-        dDPadRight.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kGrabSpeed));
+        //dDPadLeft.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kShootSpeed));
+        dDPadUp.onTrue(new SetGrabberSpeedCmd(m_GrabberSubsystem, Grabber.kGrabSpeed));
     }
 
     public XboxController getDriverController() {
