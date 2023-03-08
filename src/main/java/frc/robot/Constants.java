@@ -29,13 +29,9 @@ public final class Constants {
         // Ramp val
         public static final double kRampInSec = 0.1875;
 
-        // Braking.
-        public static final double kBrakeRate = 0.90;
-
         // Physical Robot Properties (in inches)
-        public static final double kTrackWidth = 22;
-        public static final double kWheelRadius = 3;
-        public static final double kGearRatio = 10.71;
+        public static final double kWheelRadius = 4;
+        public static final double kGearRatio = 12.75;
         public static final double kEncoderResolution = 2048;
         public static final double kCenterToWheel = 0.305;
         public static final MecanumDriveKinematics kKinematics = new MecanumDriveKinematics(
@@ -46,28 +42,21 @@ public final class Constants {
         );
 
         // Characterization Constants
-        public static final double kP = 2.8287;
+        public static final double kP = 2.9237;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
-        public static final double kS = 0.054208;
-        public static final double kV = 2.474;
-        public static final double kA = 0.21718;
-        public static final double kRamseteB = 2;
-        public static final double kRamseteZeta = 0.7;
+        public static final double kS = 0.058218;
+        public static final double kV = 2.191;
+        public static final double kA = 0.38399;
 
         public static final double kThetaP = 2.12312;
 
-        public static final double kPosP = 85.171;
-        public static final double kPosD = 5.3889;
+        public static final double kPosP = 71.772;
+        public static final double kPosD = 6.6952;
 
         public static final Constraints kAutoConstraints = new Constraints(
-            0.9144, // Max velocity     // 6ft/s
-            0.6096  // Max acceleration // 4ft/s^2
-        );
-
-        public static final Constraints kThetaConstraints = new Constraints(
-            Math.PI, 
-            Math.PI 
+            2.5, // Max velocity     // 6ft/s
+            2  // Max acceleration // 4ft/s^2
         );
     }
 
@@ -84,7 +73,7 @@ public final class Constants {
     }
 
     public static class Path {
-        public static final String[] names = { "PathONE", "PathTWO", "NotStraight" };
+        public static final String[] names = { "LeaveCommunity" };
     }
 
     public static class FourBar {
@@ -101,7 +90,7 @@ public final class Constants {
         public static final double kExtendedPosition = 43000;
         
         public static final double kMaxVelocity = 20000;
-        public static final double kMaxAcceleration = 750;
+        public static final double kMaxAcceleration = 1000;
     }
 
     public static class Extender {
@@ -115,7 +104,7 @@ public final class Constants {
         public static final int kTimeoutMs = 30;
 
         public static final double kRetractedPosition = 0;
-        public static final double kExtendedGrabPosition = 28000; // 28000 = grabbing
+        public static final double kExtendedGrabPosition = 28000;
         public static final double kExtendedPlacePosition = 34500;
 
         public static final double kMaxVelocity = 20000;
@@ -124,6 +113,6 @@ public final class Constants {
 
     public static class Grabber {
         public static final double kGrabSpeed = -0.6;
-        public static final double kDropSpeed = 0.3;
+        public static final double kDropSpeed = 0.2;
     }
 }
